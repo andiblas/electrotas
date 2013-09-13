@@ -1,0 +1,16 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:electrotas="http://schemas.android.com/apk/res-auto" >
+
+	<item
+		android:id="@+id/menu_acc1"
+		android:orderInCategory="100"
+		android:title="@string/action_acc1"
+		electrotas:showAsAction="always"/>
+	
+	<item
+		android:id="@+id/menu_conf"
+		android:orderInCategory="200"
+		android:title="@string/action_settings"
+		electrotas:showAsAction="never"/>
+
+</menu>
