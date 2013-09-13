@@ -20,7 +20,8 @@ public class HomeActivity extends ActionBarActivity {
 
 	private String[] opcionesMenu;
 	private DrawerLayout drawerL;
-	private ListView drawerList;
+	private ListView drawerListL;
+	private ListView drawerListR;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -28,18 +29,24 @@ public class HomeActivity extends ActionBarActivity {
 		setContentView(R.layout.homeactivity);
 		
 		opcionesMenu = new String[] { "Home", "Colores", "Reles" };
+		String[] optionesDisp = new String[] {"Dispositivo 1", "Dispositivo 2"};
 		drawerL = (DrawerLayout) findViewById(R.id.drawer_layout);
-		drawerList = (ListView) findViewById(R.id.left_drawer);
+		drawerListL = (ListView) findViewById(R.id.left_drawer);
+		drawerListR = (ListView) findViewById(R.id.right_drawer);
 		
-		drawerList.setAdapter(new ArrayAdapter<String>(getSupportActionBar()
+		drawerListL.setAdapter(new ArrayAdapter<String>(getSupportActionBar()
 				.getThemedContext(), android.R.layout.simple_list_item_1,
 				opcionesMenu));
+		
+		drawerListR.setAdapter(new ArrayAdapter<String>(getSupportActionBar()
+				.getThemedContext(), android.R.layout.simple_list_item_1,
+				optionesDisp));
 		
 		FragmentManager fragmentManager = getSupportFragmentManager();
 		fragmentManager.beginTransaction()
 				.replace(R.id.content_frame, new HomeFragment()).commit();
 		
-		drawerList.setOnItemClickListener(new OnItemClickListener() {
+		drawerListL.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView parent, View view,
 					int position, long id) {
@@ -61,8 +68,8 @@ public class HomeActivity extends ActionBarActivity {
 				FragmentManager fragmentManager = getSupportFragmentManager();
 				fragmentManager.beginTransaction()
 						.replace(R.id.content_frame, fragment).commit();
-				drawerList.setItemChecked(position, true);
-				drawerL.closeDrawer(drawerList);
+				drawerListL.setItemChecked(position, true);
+				drawerL.closeDrawer(drawerListL);
 			}
 		});
 	}
