@@ -1,10 +1,21 @@
 package com.electrotas.electrotasbt.ui;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Set;
+import java.util.UUID;
+
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothSocket;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,41 +29,74 @@ import com.electrotas.electrotasbt.R;
 
 public class HomeActivity extends ActionBarActivity {
 
-	private String[] opcionesMenu;
-	private DrawerLayout drawerL;
+	private DrawerLayout drawer;
 	private ListView drawerListL;
 	private ListView drawerListR;
+
+	// Local Bluetooth adapter
+	private BluetoothAdapter btAdapter = null;
+	private ArrayList<BluetoothDevice> jaja = null;
+	private final UUID MY_UUID = UUID
+			.fromString("00001101-0000-1000-8000-00805F9B34FB");
+
+	private BluetoothSocket btSocket = null;
+	private OutputStream outStream = null;
+	
+	
+	
+	public BluetoothSocket getBtSocket() {
+		return btSocket;
+	}
+
+	public void setBtSocket(BluetoothSocket btSocket) {
+		this.btSocket = btSocket;
+	}
+
+	public OutputStream getOutStream() {
+		return outStream;
+	}
+
+	public void setOutStream(OutputStream outStream) {
+		this.outStream = outStream;
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.homeactivity);
-		
-		opcionesMenu = new String[] { "Home", "Colores", "Reles" };
-		String[] optionesDisp = new String[] {"Dispositivo 1", "Dispositivo 2"};
-		drawerL = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+		iniciarBluetooth();
+
+		String[] opcionesMenu = new String[] { "Home", "Colores", "Reles" };
+		drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 		drawerListL = (ListView) findViewById(R.id.left_drawer);
 		drawerListR = (ListView) findViewById(R.id.right_drawer);
-		
+
+		Set<BluetoothDevice> caca = btAdapter.getBondedDevices();
+		jaja = new ArrayList<BluetoothDevice>();
+
+		for (BluetoothDevice a : caca) {
+			jaja.add(a);
+		}
+
 		drawerListL.setAdapter(new ArrayAdapter<String>(getSupportActionBar()
 				.getThemedContext(), android.R.layout.simple_list_item_1,
 				opcionesMenu));
-		
-		drawerListR.setAdapter(new ArrayAdapter<String>(getSupportActionBar()
-				.getThemedContext(), android.R.layout.simple_list_item_1,
-				optionesDisp));
-		
+
+		drawerListR.setAdapter(new ArrayAdapter<BluetoothDevice>(
+				getSupportActionBar().getThemedContext(),
+				android.R.layout.simple_list_item_1, jaja));
+
 		FragmentManager fragmentManager = getSupportFragmentManager();
 		fragmentManager.beginTransaction()
 				.replace(R.id.content_frame, new HomeFragment()).commit();
-		
+
 		drawerListL.setOnItemClickListener(new OnItemClickListener() {
 			@Override
-			public void onItemClick(AdapterView parent, View view,
+			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
 
 				Fragment fragment = null;
-
 				switch (position) {
 				case 0:
 					fragment = new HomeFragment();
@@ -69,11 +113,64 @@ public class HomeActivity extends ActionBarActivity {
 				fragmentManager.beginTransaction()
 						.replace(R.id.content_frame, fragment).commit();
 				drawerListL.setItemChecked(position, true);
-				drawerL.closeDrawer(drawerListL);
+				drawer.closeDrawer(drawerListL);
+			}
+		});
+		drawerListR.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+					long arg3) {
+
+				BluetoothDevice sel = jaja.get(arg2);
+
+				try {
+					btSocket = createBluetoothSocket(sel);
+				} catch (IOException e) {
+					Toast.makeText(
+							getApplicationContext(),
+							"Error al querer crear la conexión jaja."
+									+ e.getMessage(), Toast.LENGTH_LONG).show();
+				}
+
+				if (btSocket == null) {
+					return;
+				}
+
+				try {
+					btSocket.connect();
+
+					try {
+						outStream = btSocket.getOutputStream();
+					} catch (IOException e) {
+					}
+
+				} catch (Exception e) {
+					try {
+						btSocket.close();
+					} catch (IOException e1) {
+						Toast.makeText(
+								getApplicationContext(),
+								"Error al querer cerrar la conexión."
+										+ e.getMessage(), Toast.LENGTH_LONG)
+								.show();
+					}
+				}
+
+				if (outStream != null)
+					Toast.makeText(getApplicationContext(),
+							"Salio todo bien guacho!", Toast.LENGTH_LONG)
+							.show();
+
 			}
 		});
 	}
 
+//	@Override
+//	protected void onStop() {
+//		btAdapter.disable();
+//		super.onStop();
+//	}
+	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
@@ -93,9 +190,36 @@ public class HomeActivity extends ActionBarActivity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.home, menu);
 		return true;
+	}
+
+	// funciones
+	public void iniciarBluetooth() {
+
+		btAdapter = BluetoothAdapter.getDefaultAdapter();
+		if (btAdapter == null) {
+			Toast.makeText(getApplicationContext(), "No Bluetooth.",
+					Toast.LENGTH_LONG).show();
+			return;
+		}
+
+		if (!btAdapter.isEnabled()) {
+			btAdapter.enable();
+		}
+
+	}
+
+	private BluetoothSocket createBluetoothSocket(BluetoothDevice device)
+			throws IOException {
+		if (Build.VERSION.SDK_INT >= 10) {
+			try {
+				return device.createRfcommSocketToServiceRecord(MY_UUID);
+			} catch (Exception e) {
+				Log.e("Error", "Could not create secure RFComm Connection", e);
+			}
+		}
+		return null;
 	}
 
 }
