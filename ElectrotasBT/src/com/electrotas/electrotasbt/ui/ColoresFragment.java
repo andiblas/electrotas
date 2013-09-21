@@ -5,7 +5,6 @@ import java.io.OutputStream;
 
 import afzkl.development.colorpickerview.view.ColorPickerView;
 import afzkl.development.colorpickerview.view.ColorPickerView.OnColorChangedListener;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
