@@ -26,6 +26,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.electrotas.electrotasbt.R;
+import com.electrotas.electrotasbt.helpers.Tostada;
 
 public class HomeActivity extends ActionBarActivity {
 
@@ -43,15 +44,6 @@ public class HomeActivity extends ActionBarActivity {
 	private OutputStream outStream = null;
 	
 	
-	
-	public BluetoothSocket getBtSocket() {
-		return btSocket;
-	}
-
-	public void setBtSocket(BluetoothSocket btSocket) {
-		this.btSocket = btSocket;
-	}
-
 	public OutputStream getOutStream() {
 		return outStream;
 	}
@@ -64,7 +56,7 @@ public class HomeActivity extends ActionBarActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.homeactivity);
-
+		
 		iniciarBluetooth();
 
 		String[] opcionesMenu = new String[] { "Home", "Colores", "Reles" };
@@ -176,8 +168,7 @@ public class HomeActivity extends ActionBarActivity {
 		switch (item.getItemId()) {
 
 		case R.id.menu_acc1:
-			Toast.makeText(getApplicationContext(), "Accion", Toast.LENGTH_LONG)
-					.show();
+			Tostada.mostrar(getApplicationContext(), "Test", "Test test test test", Tostada.MENSAJE_MALO);
 			break;
 		case R.id.menu_conf:
 
@@ -199,8 +190,8 @@ public class HomeActivity extends ActionBarActivity {
 
 		btAdapter = BluetoothAdapter.getDefaultAdapter();
 		if (btAdapter == null) {
-			Toast.makeText(getApplicationContext(), "No Bluetooth.",
-					Toast.LENGTH_LONG).show();
+			Tostada.mostrar(getApplicationContext(), R.string.msjNoBluetooth, R.string.msjNoBluetoothDesc, Tostada.MENSAJE_MALO);
+			finish();
 			return;
 		}
 

@@ -8,5 +8,6 @@
 	
 	<string name="tit_colores">Colores!</string>
 	<string name="tit_reles">Reles!</string>
+	<string name="msjNoBluetooth">No Bluetooth</string><string name="msjNoBluetoothDesc">Este dispositivo no tiene soporte Bluetooth</string>
 
 </resources>

@@ -30,6 +30,9 @@ public class RelesFragment extends Fragment {
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView,
 					boolean isChecked) {
+				
+				if (act.getOutStream() == null) return;
+				
 				byte[] buf0 = new byte[1];
 				byte[] buf1 = new byte[1];
 				if (isChecked){

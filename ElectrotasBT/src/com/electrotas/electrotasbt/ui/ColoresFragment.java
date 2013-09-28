@@ -20,14 +20,16 @@ public class ColoresFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		final View ui = inflater
-				.inflate(R.layout.coloresfrag, container, false);
+		final View ui = inflater.inflate(R.layout.coloresfrag, container, false);
 		act = (HomeActivity) getActivity();
 		ColorPickerView cpv = (ColorPickerView) ui.findViewById(R.id.ColorPicker);
 
 		cpv.setOnColorChangedListener(new OnColorChangedListener() {
 			@Override
 			public void onColorChanged(int newColor) {
+				
+				if (act.getOutStream() == null) return;
+				
 				ui.setBackgroundColor(newColor);
 				byte[] buf0 = new byte[1];
 				byte[] buf1 = new byte[1];
@@ -52,7 +54,6 @@ public class ColoresFragment extends Fragment {
 					loc.write(buf1);
 					loc.flush();
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			}
