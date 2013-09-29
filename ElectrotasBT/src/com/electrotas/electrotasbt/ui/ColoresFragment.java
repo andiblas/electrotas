@@ -28,6 +28,9 @@ public class ColoresFragment extends Fragment {
 			@Override
 			public void onColorChanged(int newColor) {
 				
+				act.getDispositivo().write(out);
+				
+				
 				if (act.getOutStream() == null) return;
 				
 				ui.setBackgroundColor(newColor);

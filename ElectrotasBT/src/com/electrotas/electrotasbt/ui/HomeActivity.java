@@ -1,21 +1,15 @@
 package com.electrotas.electrotasbt.ui;
 
-import java.io.IOException;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Set;
-import java.util.UUID;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothSocket;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,9 +17,9 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.electrotas.electrotasbt.R;
+import com.electrotas.electrotasbt.core.ETDevice;
 import com.electrotas.electrotasbt.helpers.Tostada;
 
 public class HomeActivity extends ActionBarActivity {
@@ -37,19 +31,11 @@ public class HomeActivity extends ActionBarActivity {
 	// Local Bluetooth adapter
 	private BluetoothAdapter btAdapter = null;
 	private ArrayList<BluetoothDevice> jaja = null;
-	private final UUID MY_UUID = UUID
-			.fromString("00001101-0000-1000-8000-00805F9B34FB");
 
-	private BluetoothSocket btSocket = null;
-	private OutputStream outStream = null;
-	
-	
-	public OutputStream getOutStream() {
-		return outStream;
-	}
+	private final ETDevice dispositivo = new ETDevice(getApplicationContext());
 
-	public void setOutStream(OutputStream outStream) {
-		this.outStream = outStream;
+	public ETDevice getDispositivo() {
+		return dispositivo;
 	}
 
 	@Override
@@ -110,49 +96,8 @@ public class HomeActivity extends ActionBarActivity {
 		});
 		drawerListR.setOnItemClickListener(new OnItemClickListener() {
 			@Override
-			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
-					long arg3) {
-
-				BluetoothDevice sel = jaja.get(arg2);
-
-				try {
-					btSocket = createBluetoothSocket(sel);
-				} catch (IOException e) {
-					Toast.makeText(
-							getApplicationContext(),
-							"Error al querer crear la conexión jaja."
-									+ e.getMessage(), Toast.LENGTH_LONG).show();
-				}
-
-				if (btSocket == null) {
-					return;
-				}
-
-				try {
-					btSocket.connect();
-
-					try {
-						outStream = btSocket.getOutputStream();
-					} catch (IOException e) {
-					}
-
-				} catch (Exception e) {
-					try {
-						btSocket.close();
-					} catch (IOException e1) {
-						Toast.makeText(
-								getApplicationContext(),
-								"Error al querer cerrar la conexión."
-										+ e.getMessage(), Toast.LENGTH_LONG)
-								.show();
-					}
-				}
-
-				if (outStream != null)
-					Toast.makeText(getApplicationContext(),
-							"Salio todo bien guacho!", Toast.LENGTH_LONG)
-							.show();
-
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+				dispositivo.connect(jaja.get(arg2));
 			}
 		});
 	}
@@ -200,17 +145,5 @@ public class HomeActivity extends ActionBarActivity {
 		}
 
 	}
-
-	private BluetoothSocket createBluetoothSocket(BluetoothDevice device)
-			throws IOException {
-		if (Build.VERSION.SDK_INT >= 10) {
-			try {
-				return device.createRfcommSocketToServiceRecord(MY_UUID);
-			} catch (Exception e) {
-				Log.e("Error", "Could not create secure RFComm Connection", e);
-			}
-		}
-		return null;
-	}
-
+	
 }
