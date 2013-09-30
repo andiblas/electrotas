@@ -1,8 +1,5 @@
 package com.electrotas.electrotasbt.ui;
 
-import java.io.IOException;
-import java.io.OutputStream;
-
 import afzkl.development.colorpickerview.view.ColorPickerView;
 import afzkl.development.colorpickerview.view.ColorPickerView.OnColorChangedListener;
 import android.os.Bundle;
@@ -27,38 +24,7 @@ public class ColoresFragment extends Fragment {
 		cpv.setOnColorChangedListener(new OnColorChangedListener() {
 			@Override
 			public void onColorChanged(int newColor) {
-				
-				act.getDispositivo().write(out);
-				
-				
-				if (act.getOutStream() == null) return;
-				
-				ui.setBackgroundColor(newColor);
-				byte[] buf0 = new byte[1];
-				byte[] buf1 = new byte[1];
-				OutputStream loc = act.getOutStream();
-				
-				try {
-					buf0[0] = (byte) 001;
-					buf1[0] = (byte) ((newColor >> 16) & 0xff);
-					loc.write(buf0);
-					loc.write(buf1);
-					loc.flush();
-					
-					buf0[0] = (byte) 002;
-					buf1[0] = (byte) ((newColor >> 8) & 0xff);
-					loc.write(buf0);
-					loc.write(buf1);
-					loc.flush();
-					
-					buf0[0] = (byte) 003;
-					buf1[0] = (byte) (newColor & 0xff);
-					loc.write(buf0);
-					loc.write(buf1);
-					loc.flush();
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				}
+				act.getDispositivo().cambiarColor(newColor);
 			}
 		});
 

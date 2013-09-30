@@ -1,7 +1,6 @@
 package com.electrotas.electrotasbt.core;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.UUID;
 
 import android.bluetooth.BluetoothAdapter;
@@ -195,9 +194,10 @@ public class ETDevice {
 		new ConnectedThread(acc, ConnectedThread.ACCION_CAMBIARCOLOR).start();
 	}
 
-	public void toggleRele(int rele) {
+	public void toggleRele(int rele, boolean chk) {
 		acc.setNroRele(rele);
-		new ConnectedThread(acc, ConnectedThread.ACCION_CAMBIARCOLOR).start();
+		acc.setCheckeado(chk);
+		new ConnectedThread(acc, ConnectedThread.ACCION_CAMBIARRELE).start();
 	}
 
 	/**
