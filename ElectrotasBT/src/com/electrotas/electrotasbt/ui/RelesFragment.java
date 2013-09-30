@@ -30,27 +30,7 @@ public class RelesFragment extends Fragment {
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView,
 					boolean isChecked) {
-				
-				if (act.getOutStream() == null) return;
-				
-				byte[] buf0 = new byte[1];
-				byte[] buf1 = new byte[1];
-				if (isChecked){
-					buf0[0] = (byte) 255;
-					buf1[0] = (byte) 1;	
-				}else{
-					buf0[0] = (byte) 255;
-					buf1[0] = (byte) 2;
-				}
-
-				OutputStream loc = act.getOutStream();
-				try {
-					loc.write(buf0);
-					loc.write(buf1);
-					loc.flush();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+				act.getDispositivo().toggleRele(1, isChecked);
 			}
 
 		});
