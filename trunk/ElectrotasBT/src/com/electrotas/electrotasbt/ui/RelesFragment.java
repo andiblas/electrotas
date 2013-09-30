@@ -1,8 +1,5 @@
 package com.electrotas.electrotasbt.ui;
 
-import java.io.IOException;
-import java.io.OutputStream;
-
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
