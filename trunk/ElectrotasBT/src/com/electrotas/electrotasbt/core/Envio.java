@@ -70,7 +70,9 @@ public class Envio implements Acciones {
 
 	@Override
 	public void toggleRele() {
+		Log.d("DEBUG", "Antes de Entrar");
 		if (nroRele == -1) return;
+		Log.d("DEBUG", "Entro!!!");
 		byte[] buf0 = new byte[1];
 		byte[] buf1 = new byte[1];
 		if (checkeado){

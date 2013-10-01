@@ -32,7 +32,7 @@ public class HomeActivity extends ActionBarActivity {
 	private BluetoothAdapter btAdapter = null;
 	private ArrayList<BluetoothDevice> jaja = null;
 
-	private final ETDevice dispositivo = new ETDevice(getApplicationContext());
+	private ETDevice dispositivo;
 
 	public ETDevice getDispositivo() {
 		return dispositivo;
@@ -44,15 +44,17 @@ public class HomeActivity extends ActionBarActivity {
 		setContentView(R.layout.homeactivity);
 		
 		iniciarBluetooth();
-
+		
+		dispositivo = new ETDevice(getApplicationContext());
+		
 		String[] opcionesMenu = new String[] { "Home", "Colores", "Reles" };
 		drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 		drawerListL = (ListView) findViewById(R.id.left_drawer);
 		drawerListR = (ListView) findViewById(R.id.right_drawer);
-
+		
 		Set<BluetoothDevice> caca = btAdapter.getBondedDevices();
 		jaja = new ArrayList<BluetoothDevice>();
-
+		
 		for (BluetoothDevice a : caca) {
 			jaja.add(a);
 		}
