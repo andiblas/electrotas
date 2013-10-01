@@ -25,7 +25,7 @@ public class ETDevice {
 	// Attr
 	private final BluetoothAdapter mAdapter;
 	private int estActual = 0;
-	private Envio acc;
+	private BluetoothSocket btSocket;
 
 	// Constantes
 	public static final int STATE_NADA = 0; // Haciendo nada
@@ -34,7 +34,6 @@ public class ETDevice {
 
 	public ETDevice(Context ct) {
 		mAdapter = BluetoothAdapter.getDefaultAdapter();
-
 	}
 
 	private synchronized void setState(int state) {
@@ -103,8 +102,8 @@ public class ETDevice {
 			thConectado.cancel();
 			thConectado = null;
 		}
-
-		acc = new Envio(socket);
+		
+		btSocket = socket;
 
 		setState(STATE_CONECTADO);
 	}
@@ -190,14 +189,20 @@ public class ETDevice {
 	}
 
 	public void cambiarColor(int newC) {
-		acc.setNewColor(newC);
-		new ConnectedThread(acc, ConnectedThread.ACCION_CAMBIARCOLOR).start();
+		if (estActual == STATE_CONECTADO) {
+			Envio acc = new Envio(btSocket);
+			acc.setNewColor(newC);
+			new ConnectedThread(acc, ConnectedThread.ACCION_CAMBIARCOLOR).start();
+		}
 	}
 
 	public void toggleRele(int rele, boolean chk) {
-		acc.setNroRele(rele);
-		acc.setCheckeado(chk);
-		new ConnectedThread(acc, ConnectedThread.ACCION_CAMBIARRELE).start();
+		if (estActual == STATE_CONECTADO) {
+			Envio acc = new Envio(btSocket);
+			acc.setNroRele(rele);
+			acc.setCheckeado(chk);
+			new ConnectedThread(acc, ConnectedThread.ACCION_CAMBIARRELE).start();
+		}
 	}
 
 	/**
@@ -205,7 +210,7 @@ public class ETDevice {
 	 */
 	private class ConnectedThread extends Thread {
 
-		public final int accion = 0;
+		public int accion = 0;
 		public Acciones caca;
 
 		public static final int ACCION_CAMBIARCOLOR = 0;
@@ -213,6 +218,7 @@ public class ETDevice {
 
 		public ConnectedThread(Acciones a, int queAccion) {
 			caca = a;
+			accion = queAccion;
 		}
 
 		public void run() {
