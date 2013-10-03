@@ -47,7 +47,7 @@ public class Envio implements Acciones {
 		byte[] buf1 = new byte[1];
 
 		try {
-			synchronized (Envio.this) {
+			synchronized (Envio.class) {
 				buf0[0] = (byte) 001;
 				buf1[0] = (byte) ((newColor >> 16) & 0xff);
 				mmOutStream.write(buf0);
@@ -89,7 +89,7 @@ public class Envio implements Acciones {
 		}
 
 		try {
-			synchronized (Envio.this) {
+			synchronized (Envio.class) {
 				mmOutStream.write(buf0);
 				mmOutStream.write(buf1);
 				mmOutStream.flush();
