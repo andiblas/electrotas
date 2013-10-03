@@ -9,12 +9,12 @@ import android.util.Log;
 public class Envio implements Acciones {
 	private final BluetoothSocket mmSocket;
 	private final OutputStream mmOutStream;
-	
+
 	private int newColor = -1;
 	private int nroRele = -1;
 	private boolean checkeado = true;
-	
-	public Envio(BluetoothSocket btS){
+
+	public Envio(BluetoothSocket btS) {
 		mmSocket = btS;
 		OutputStream tmpOut = null;
 		// Get the BluetoothSocket input and output streams
@@ -26,7 +26,7 @@ public class Envio implements Acciones {
 
 		mmOutStream = tmpOut;
 	}
-	
+
 	public void setNewColor(int newColor) {
 		this.newColor = newColor;
 	}
@@ -41,28 +41,32 @@ public class Envio implements Acciones {
 
 	@Override
 	public void cambiarColor() {
-		if (newColor == -1) return;
+		if (newColor == -1)
+			return;
 		byte[] buf0 = new byte[1];
 		byte[] buf1 = new byte[1];
-		
+
 		try {
-			buf0[0] = (byte) 001;
-			buf1[0] = (byte) ((newColor >> 16) & 0xff);
-			mmOutStream.write(buf0);
-			mmOutStream.write(buf1);
-			mmOutStream.flush();
-			
-			buf0[0] = (byte) 002;
-			buf1[0] = (byte) ((newColor >> 8) & 0xff);
-			mmOutStream.write(buf0);
-			mmOutStream.write(buf1);
-			mmOutStream.flush();
-			
-			buf0[0] = (byte) 003;
-			buf1[0] = (byte) (newColor & 0xff);
-			mmOutStream.write(buf0);
-			mmOutStream.write(buf1);
-			mmOutStream.flush();
+			synchronized (Envio.this) {
+				buf0[0] = (byte) 001;
+				buf1[0] = (byte) ((newColor >> 16) & 0xff);
+				mmOutStream.write(buf0);
+				mmOutStream.write(buf1);
+				mmOutStream.flush();
+
+				buf0[0] = (byte) 002;
+				buf1[0] = (byte) ((newColor >> 8) & 0xff);
+				mmOutStream.write(buf0);
+				mmOutStream.write(buf1);
+				mmOutStream.flush();
+
+				buf0[0] = (byte) 003;
+				buf1[0] = (byte) (newColor & 0xff);
+				mmOutStream.write(buf0);
+				mmOutStream.write(buf1);
+				mmOutStream.flush();
+			}
+
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
@@ -71,22 +75,25 @@ public class Envio implements Acciones {
 	@Override
 	public void toggleRele() {
 		Log.d("DEBUG", "Antes de Entrar");
-		if (nroRele == -1) return;
+		if (nroRele == -1)
+			return;
 		Log.d("DEBUG", "Entro!!!");
 		byte[] buf0 = new byte[1];
 		byte[] buf1 = new byte[1];
-		if (checkeado){
+		if (checkeado) {
 			buf0[0] = (byte) 255;
-			buf1[0] = (byte) 1;	
-		}else{
+			buf1[0] = (byte) 1;
+		} else {
 			buf0[0] = (byte) 255;
 			buf1[0] = (byte) 2;
 		}
 
 		try {
-			mmOutStream.write(buf0);
-			mmOutStream.write(buf1);
-			mmOutStream.flush();
+			synchronized (Envio.this) {
+				mmOutStream.write(buf0);
+				mmOutStream.write(buf1);
+				mmOutStream.flush();
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
