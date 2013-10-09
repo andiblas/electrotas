@@ -1,7 +1,5 @@
 package com.electrotas.electrotasbt.core.data;
 
-import java.lang.reflect.Field;
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -36,17 +34,10 @@ public class Color {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         
         ContentValues v = new ContentValues();
-        for (Field f : Color.class.getDeclaredFields()){
-        	try {
-				v.put(f.getName(), f.getGenericType() f.get(this));
-			} catch (IllegalArgumentException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-        }
+        v.put("nombre", nombre);
+        v.put("color",color);
+        
+        return db.insert(Color.class.getSimpleName(), null, v);
         
 	}
 }
