@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:electrotas="http://schemas.android.com/apk/res-auto" >
+
+	<item
+		android:id="@+id/menu_guardarColor"
+		android:orderInCategory="100"
+		android:title="@string/action_guardarColor"
+		electrotas:showAsAction="always"/>
+	
+
+</menu>
