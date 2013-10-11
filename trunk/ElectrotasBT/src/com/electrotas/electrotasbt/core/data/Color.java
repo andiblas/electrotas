@@ -1,5 +1,7 @@
 package com.electrotas.electrotasbt.core.data;
 
+import java.util.ArrayList;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -19,6 +21,11 @@ public class Color {
 
 	public Color(String c) {
 		color = c;
+	}
+	
+	private Color(Cursor c){
+		id = c.getInt(0);
+		color = c.getString(1);
 	}
 
 	public int getId() {
@@ -47,15 +54,70 @@ public class Color {
 		return db.insert(Color.class.getSimpleName(), null, v);
 	}
 	
-	public static Cursor select(Context ctx){
+	public static Cursor selectCS(Context ctx){
 		DBHelper dbHelper = DBProvider.obtenerConex(ctx);
 		SQLiteDatabase db = dbHelper.getReadableDatabase();
 		
 		if (db == null) return null;
 		
-		return db.query(Color.class.getSimpleName(), null, null, null, null, null, null);
+		Cursor resul = null;
+		try {
+			resul = db.query(Color.class.getSimpleName(), null, null, null, null, null, null);
+		} finally{
+			DBProvider.cerrarConex();
+		}
+		return resul;
 		
 	}
 	
+	public static ArrayList<Color> select(Context ctx){
+		DBHelper dbHelper = DBProvider.obtenerConex(ctx);
+		SQLiteDatabase db = dbHelper.getReadableDatabase();
+		
+		if (db == null) return null;
+		
+		Cursor cursor = db.query(Color.class.getSimpleName(), null, null, null, null, null, null);
+
+		if (cursor.getCount() <= 0)
+			return new ArrayList<Color>();
+
+		ArrayList<Color> colores = new ArrayList<Color>();
+
+		cursor.moveToFirst();
+		while (!cursor.isAfterLast()) {
+			colores.add(new Color(cursor));
+			cursor.moveToNext();
+		}
+		
+		cursor.close();
+		
+		return colores;
+		
+	}
+	
+	public void delete(Context ctx){
+		DBHelper dbHelper = DBProvider.obtenerConex(ctx);
+		SQLiteDatabase db = dbHelper.getWritableDatabase();
+		if (db == null) return;
+		
+		try {
+			db.delete(Color.class.getSimpleName(), "id = ?", new String[] {String.valueOf(this.id)});
+		} finally{
+			DBProvider.cerrarConex();
+		}
+	}
 	
 }
+
+
+
+
+
+
+
+
+
+
+
+
+

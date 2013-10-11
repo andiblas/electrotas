@@ -1,5 +1,7 @@
 package com.electrotas.electrotasbt.ui;
 
+import java.util.ArrayList;
+
 import afzkl.development.colorpickerview.view.ColorPickerView;
 import afzkl.development.colorpickerview.view.ColorPickerView.OnColorChangedListener;
 import android.os.Bundle;
@@ -10,25 +12,34 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
+import android.widget.GridView;
 
 import com.electrotas.electrotasbt.R;
 import com.electrotas.electrotasbt.core.data.Color;
 import com.electrotas.electrotasbt.helpers.Tostada;
+import com.electrotas.electrotasbt.ui.adapters.GridColoresAdapter;
 
 public class ColoresFragment extends Fragment {
 
 	private HomeActivity act;
 	private int colorActual = 0;
+	private ArrayList<Color> mLista;
+	private GridColoresAdapter adap;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
+
 		final View ui = inflater
 				.inflate(R.layout.coloresfrag, container, false);
 		act = (HomeActivity) getActivity();
-		ColorPickerView cpv = (ColorPickerView) ui
+		final ColorPickerView cpv = (ColorPickerView) ui
 				.findViewById(R.id.ColorPicker);
 		setHasOptionsMenu(true);
+
 		cpv.setOnColorChangedListener(new OnColorChangedListener() {
 			@Override
 			public void onColorChanged(int newColor) {
@@ -36,6 +47,32 @@ public class ColoresFragment extends Fragment {
 					return;
 				colorActual = newColor;
 				act.getDispositivo().cambiarColor(newColor);
+			}
+		});
+
+		mLista = Color.select(getActivity().getApplicationContext());
+
+		if (mLista != null)
+			adap = new GridColoresAdapter(mLista, getActivity().getApplicationContext());
+		
+		GridView grdColores = (GridView) ui.findViewById(R.id.gridColores);
+		grdColores.setAdapter(adap);
+		grdColores.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+					long arg3) {
+				cpv.setColor(android.graphics.Color.parseColor(mLista.get(arg2)
+						.getColor()));
+			}
+		});
+		grdColores.setOnItemLongClickListener(new OnItemLongClickListener() {
+			@Override
+			public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
+					int arg2, long arg3) {
+				mLista.get(arg2).delete(getActivity().getApplicationContext());
+				mLista.remove(arg2);
+				adap.notifyDataSetChanged();
+				return false;
 			}
 		});
 
@@ -54,9 +91,14 @@ public class ColoresFragment extends Fragment {
 			try {
 				Color nuevo = new Color(colorActual);
 				nuevo.insert(getActivity().getApplicationContext());
-				Tostada.mostrar(getActivity().getApplicationContext(), "Color guardado!", null, Tostada.MENSAJE_BUENO);
+				mLista.add(nuevo);
+				adap.notifyDataSetChanged();
+				Tostada.mostrar(getActivity().getApplicationContext(),
+						"Color guardado!", null, Tostada.MENSAJE_BUENO);
 			} catch (Exception e) {
-				Tostada.mostrar(getActivity().getApplicationContext(), "Ocurrio un problema al guardar el color.", null, Tostada.MENSAJE_MALO);
+				Tostada.mostrar(getActivity().getApplicationContext(),
+						"Ocurrio un problema al guardar el color.", null,
+						Tostada.MENSAJE_MALO);
 			}
 			return true;
 		default:
