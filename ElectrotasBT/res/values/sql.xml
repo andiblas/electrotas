@@ -7,7 +7,6 @@
         CREATE TABLE Color
         (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            Nombre TEXT,
             Color TEXT
         );
         </item>
