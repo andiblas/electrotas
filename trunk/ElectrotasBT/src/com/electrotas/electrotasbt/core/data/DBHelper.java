@@ -1,10 +1,5 @@
 package com.electrotas.electrotasbt.core.data;
 
-/**
- *
- * @author
- * AndresP
- */
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -12,13 +7,17 @@ import android.util.Log;
 
 import com.electrotas.electrotasbt.R;
 
+/**
+ * 
+ * @author
+ * AndresP
+ */
 public class DBHelper extends SQLiteOpenHelper {
 	
     //Sentencia SQL para crear la tabla de Usuarios
     private static final String NOMBRE_DB = "VECTIOCIAT.db";
     private static final int VERSION = 4;
-    private String[] SQLCreate;
-    
+    private final String[] SQLCreate;
     
     //Usar este constructor para la base de datos NOMBRE_DB (bd por default)
     public DBHelper(Context contexto) {
