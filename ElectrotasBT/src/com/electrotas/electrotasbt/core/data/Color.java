@@ -7,6 +7,11 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+/**
+ * Clase para tratar los colores personalizados.
+ * @author Andres
+ *
+ */
 public class Color {
 
 	private int id;
@@ -83,13 +88,16 @@ public class Color {
 
 		ArrayList<Color> colores = new ArrayList<Color>();
 
-		cursor.moveToFirst();
-		while (!cursor.isAfterLast()) {
-			colores.add(new Color(cursor));
-			cursor.moveToNext();
+		try {
+			cursor.moveToFirst();
+			while (!cursor.isAfterLast()) {
+				colores.add(new Color(cursor));
+				cursor.moveToNext();
+			}
+		} finally {
+			cursor.close();
+			DBProvider.cerrarConex();
 		}
-		
-		cursor.close();
 		
 		return colores;
 		
@@ -108,16 +116,3 @@ public class Color {
 	}
 	
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
