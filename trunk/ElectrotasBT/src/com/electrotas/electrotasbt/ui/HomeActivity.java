@@ -22,6 +22,7 @@ import android.widget.ListView;
 import com.electrotas.electrotasbt.R;
 import com.electrotas.electrotasbt.core.ETDevice;
 import com.electrotas.electrotasbt.helpers.Tostada;
+import com.electrotas.electrotasbt.ui.adapters.MenuAdapter;
 
 public class HomeActivity extends ActionBarActivity {
 
@@ -48,7 +49,6 @@ public class HomeActivity extends ActionBarActivity {
 		
 		dispositivo = new ETDevice(getApplicationContext());
 		
-		String[] opcionesMenu = new String[] { "Home", "Colores", "Reles" };
 		drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 		drawerListL = (ListView) findViewById(R.id.left_drawer);
 		drawerListR = (ListView) findViewById(R.id.right_drawer);
@@ -59,10 +59,8 @@ public class HomeActivity extends ActionBarActivity {
 		for (BluetoothDevice a : caca) {
 			jaja.add(a);
 		}
-
-		drawerListL.setAdapter(new ArrayAdapter<String>(getSupportActionBar()
-				.getThemedContext(), android.R.layout.simple_list_item_1,
-				opcionesMenu));
+		
+		drawerListL.setAdapter(new MenuAdapter(this));
 
 		drawerListR.setAdapter(new ArrayAdapter<BluetoothDevice>(
 				getSupportActionBar().getThemedContext(),
