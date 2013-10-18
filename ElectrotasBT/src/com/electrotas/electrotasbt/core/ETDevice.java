@@ -26,6 +26,7 @@ public class ETDevice {
 	private final BluetoothAdapter mAdapter;
 	private int estActual = 0;
 	private BluetoothSocket btSocket;
+	private boolean[] estadoReles;
 
 	// Constantes
 	public static final int STATE_NADA = 0; // Haciendo nada
@@ -42,6 +43,14 @@ public class ETDevice {
 
 	public synchronized int getState() {
 		return estActual;
+	}
+
+	public synchronized void setEstadoReles(boolean[] c) {
+		estadoReles = c;
+	}
+
+	public synchronized boolean[] getEstadoReles() {
+		return estadoReles;
 	}
 
 	/**
@@ -102,7 +111,7 @@ public class ETDevice {
 			thConectado.cancel();
 			thConectado = null;
 		}
-		
+
 		btSocket = socket;
 
 		setState(STATE_CONECTADO);
@@ -189,20 +198,24 @@ public class ETDevice {
 	}
 
 	public void cambiarColor(int newC) {
-		if (estActual == STATE_CONECTADO) {
-			Envio acc = new Envio(btSocket);
-			acc.setNewColor(newC);
-			new ConnectedThread(acc, ConnectedThread.ACCION_CAMBIARCOLOR).start();
-		}
+		if (estActual == STATE_CONECTADO) return;
+		Envio acc = new Envio(btSocket);
+		acc.setNewColor(newC);
+		new ConnectedThread(acc, ConnectedThread.ACCION_CAMBIARCOLOR).start();
 	}
 
 	public void toggleRele(int rele, boolean chk) {
-		if (estActual == STATE_CONECTADO) {
-			Envio acc = new Envio(btSocket);
-			acc.setNroRele(rele);
-			acc.setCheckeado(chk);
-			new ConnectedThread(acc, ConnectedThread.ACCION_CAMBIARRELE).start();
-		}
+		if (estActual == STATE_CONECTADO) return;
+		Envio acc = new Envio(btSocket);
+		acc.setNroRele(rele);
+		acc.setCheckeado(chk);
+		new ConnectedThread(acc, ConnectedThread.ACCION_CAMBIARRELE).start();
+	}
+
+	public void consultarEstado() {
+		if (estActual != STATE_CONECTADO) return;
+		Envio acc = new Envio(btSocket);
+		new ConnectedThread(acc, ConnectedThread.ACCION_CONSULTARESTADO).start();
 	}
 
 	/**
@@ -215,6 +228,7 @@ public class ETDevice {
 
 		public static final int ACCION_CAMBIARCOLOR = 0;
 		public static final int ACCION_CAMBIARRELE = 1;
+		public static final int ACCION_CONSULTARESTADO = 2;
 
 		public ConnectedThread(Acciones a, int queAccion) {
 			caca = a;
@@ -228,6 +242,10 @@ public class ETDevice {
 				break;
 			case ACCION_CAMBIARRELE:
 				caca.toggleRele();
+			case ACCION_CONSULTARESTADO:
+				boolean[] novo = getEstadoReles();
+				if (novo != null)
+					setEstadoReles(novo);
 				break;
 			}
 		}

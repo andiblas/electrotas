@@ -2,6 +2,7 @@ package com.electrotas.electrotasbt.ui;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ToggleButton;
 
 import com.electrotas.electrotasbt.R;
+import com.electrotas.electrotasbt.core.ETDevice;
 
 public class RelesFragment extends Fragment {
 
@@ -31,6 +33,53 @@ public class RelesFragment extends Fragment {
 			}
 
 		});
+		Log.i(RelesFragment.class.getSimpleName(), "On Create View*******");
 		return ui;
 	}
+	
+	@Override
+	public void onStart() {
+		super.onStart();
+		Log.i(RelesFragment.class.getSimpleName(), "On Start*******");
+	}
+	
+	@Override
+	public void onResume() {
+		super.onResume();
+		Log.i(RelesFragment.class.getSimpleName(), "On Resume*******");
+	}
+	
+	@Override
+	public void onPause() {
+		super.onPause();
+		Log.i(RelesFragment.class.getSimpleName(), "On Pause*******");
+	}
+	
+	@Override
+	public void onStop() {
+		super.onStop();
+		Log.i(RelesFragment.class.getSimpleName(), "On Stop*******");
+	}
+	
+	private final class Checkeador extends Thread{
+		
+		private final ETDevice dispo;
+		
+		protected Checkeador(ETDevice c){
+			dispo = c;
+		}
+		
+		@Override
+		public void run() {
+			while (true){
+				
+			}
+		}
+		
+	}
+	
 }
+
+
+
+
