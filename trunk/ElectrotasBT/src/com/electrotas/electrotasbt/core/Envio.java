@@ -1,6 +1,7 @@
 package com.electrotas.electrotasbt.core;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 
 import android.bluetooth.BluetoothSocket;
@@ -9,6 +10,7 @@ import android.util.Log;
 public class Envio implements Acciones {
 	private final BluetoothSocket mmSocket;
 	private final OutputStream mmOutStream;
+	private final InputStream mmInStream;
 
 	private int newColor = -1;
 	private int nroRele = -1;
@@ -17,13 +19,16 @@ public class Envio implements Acciones {
 	public Envio(BluetoothSocket btS) {
 		mmSocket = btS;
 		OutputStream tmpOut = null;
+		InputStream tmpIn = null;
 		// Get the BluetoothSocket input and output streams
 		try {
 			tmpOut = btS.getOutputStream();
+			tmpIn = btS.getInputStream();
 		} catch (IOException e) {
 			Log.e("Envio", "temp sockets not created", e);
 		}
 
+		mmInStream = tmpIn;
 		mmOutStream = tmpOut;
 	}
 
@@ -95,6 +100,35 @@ public class Envio implements Acciones {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public boolean[] checkState() {
+
+		boolean[] resul = new boolean[8];
+		// se manda un 5 para avisar que
+		// se va a consultar el estado
+		byte[] buf0 = new byte[1];
+		buf0[0] = (byte) 005;
+
+		try {
+			synchronized (Envio.class) {
+				mmOutStream.write(buf0);
+				mmOutStream.flush();
+
+				buf0 = new byte[1];
+				for (int i = 0; i < 8; i++) {
+					mmInStream.read(buf0);
+					resul[i] = buf0[0] == 1 ? true : false;
+				}
+				
+			}
+			return resul;
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	@Override
