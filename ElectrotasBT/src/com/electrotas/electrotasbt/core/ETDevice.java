@@ -33,7 +33,7 @@ public class ETDevice {
 	public static final int STATE_CONECTANDO = 1; // Intentando Conectar
 	public static final int STATE_CONECTADO = 2; // Actualmente conectado
 
-	public ETDevice(Context ct) {
+	public ETDevice() {
 		mAdapter = BluetoothAdapter.getDefaultAdapter();
 	}
 
@@ -212,10 +212,18 @@ public class ETDevice {
 		new ConnectedThread(acc, ConnectedThread.ACCION_CAMBIARRELE).start();
 	}
 
-	public void consultarEstado() {
+	public void actualizarEstado() {
 		if (estActual != STATE_CONECTADO) return;
 		Envio acc = new Envio(btSocket);
-		new ConnectedThread(acc, ConnectedThread.ACCION_CONSULTARESTADO).start();
+		boolean[] novo = acc.checkState();
+		if (novo != null)
+			setEstadoReles(novo);
+//		ConnectedThread th = new ConnectedThread(acc, ConnectedThread.ACCION_ACTUALIZARESTADO);
+//		th.start();
+//		try {
+//			th.join();
+//		} catch (InterruptedException e) {
+//		}
 	}
 
 	/**
@@ -228,7 +236,7 @@ public class ETDevice {
 
 		public static final int ACCION_CAMBIARCOLOR = 0;
 		public static final int ACCION_CAMBIARRELE = 1;
-		public static final int ACCION_CONSULTARESTADO = 2;
+		public static final int ACCION_ACTUALIZARESTADO = 2;
 
 		public ConnectedThread(Acciones a, int queAccion) {
 			caca = a;
@@ -242,8 +250,8 @@ public class ETDevice {
 				break;
 			case ACCION_CAMBIARRELE:
 				caca.toggleRele();
-			case ACCION_CONSULTARESTADO:
-				boolean[] novo = getEstadoReles();
+			case ACCION_ACTUALIZARESTADO:
+				boolean[] novo = caca.checkState();
 				if (novo != null)
 					setEstadoReles(novo);
 				break;
