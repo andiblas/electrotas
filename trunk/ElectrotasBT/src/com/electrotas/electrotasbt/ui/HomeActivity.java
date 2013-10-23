@@ -47,7 +47,7 @@ public class HomeActivity extends ActionBarActivity {
 		
 		iniciarBluetooth();
 		
-		dispositivo = new ETDevice(getApplicationContext());
+		dispositivo = new ETDevice();
 		
 		drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 		drawerListL = (ListView) findViewById(R.id.left_drawer);

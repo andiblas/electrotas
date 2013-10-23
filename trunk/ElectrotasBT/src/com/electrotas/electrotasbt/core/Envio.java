@@ -101,7 +101,13 @@ public class Envio implements Acciones {
 			e.printStackTrace();
 		}
 	}
-
+	
+	/**
+	 * Checkea y devuelve un array de boolean con el estado
+	 * de cada uno de los reles de como se encuentra en la
+	 * placa a la hora de ejecutar el metodo
+	 * @author Andres
+	 */
 	@Override
 	public boolean[] checkState() {
 
