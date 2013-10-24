@@ -6,7 +6,6 @@ import java.util.UUID;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
-import android.content.Context;
 import android.util.Log;
 
 public class ETDevice {
@@ -75,8 +74,10 @@ public class ETDevice {
 
 	}
 
-	public synchronized void connect(BluetoothDevice device) {
-
+	public synchronized void connect(BluetoothDevice device) throws Exception {
+		
+		if (!mAdapter.isEnabled()) throw new Exception("El Bluetooth no esta activado.;Por favor, activalo y vuelve a intentar.");
+		
 		// Cancel any thread attempting to make a connection
 		if (estActual == STATE_CONECTANDO) {
 			if (thConnect != null) {

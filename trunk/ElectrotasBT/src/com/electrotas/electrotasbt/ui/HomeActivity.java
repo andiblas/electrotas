@@ -5,6 +5,10 @@ import java.util.Set;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -100,7 +104,12 @@ public class HomeActivity extends ActionBarActivity {
 		drawerListR.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-				dispositivo.connect(jaja.get(arg2));
+				try {
+					dispositivo.connect(jaja.get(arg2));
+				} catch (Exception e) {
+					String[] msj = e.getMessage().split(";");
+					Tostada.mostrar(getApplicationContext(), msj[0], msj[1], Tostada.MENSAJE_MALO);
+				}
 			}
 		});
 	}
@@ -112,11 +121,36 @@ public class HomeActivity extends ActionBarActivity {
 //	}
 	
 	@Override
+	protected void onResume() {
+		super.onResume();
+		registerReceiver(mReceiver, new IntentFilter(BluetoothDevice.ACTION_FOUND));
+	}
+	
+	@Override
+	protected void onPause() {
+		super.onPause();
+		unregisterReceiver(mReceiver);
+	}
+	
+	// Create a BroadcastReceiver for ACTION_FOUND
+	private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
+	    public void onReceive(Context context, Intent intent) {
+	        String action = intent.getAction();
+	        // When discovery finds a device
+	        if (BluetoothDevice.ACTION_FOUND.equals(action)) {
+	            // Get the BluetoothDevice object from the Intent
+	            BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+	            // Add the name and address to an array adapter to show in a ListView
+	            mArrayAdapter.add(device.getName() + "\n" + device.getAddress());
+	        }
+	    }
+	};
+	
+	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 
 		case R.id.menu_acc1:
-			Tostada.mostrar(getApplicationContext(), "Test", "Test test test test", Tostada.MENSAJE_MALO);
 			break;
 		case R.id.menu_conf:
 

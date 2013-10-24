@@ -55,8 +55,10 @@ public class Color {
 
 		ContentValues v = new ContentValues();
 		v.put("color", color);
-
-		return db.insert(Color.class.getSimpleName(), null, v);
+		long resul = db.insert(Color.class.getSimpleName(), null, v);
+		
+		DBProvider.cerrarConex();
+		return resul;
 	}
 	
 	public static Cursor selectCS(Context ctx){
