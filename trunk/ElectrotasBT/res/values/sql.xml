@@ -11,5 +11,15 @@
         );
         </item>
         
+        <!-- 1 -->
+        <item>
+        CREATE TABLE Placa
+        (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            Nombre TEXT,
+            MAC TEXT
+        );
+        </item>
+        
     </string-array>
 </resources>
