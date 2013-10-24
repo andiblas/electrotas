@@ -198,14 +198,14 @@ public class ETDevice {
 	}
 
 	public void cambiarColor(int newC) {
-		if (estActual == STATE_CONECTADO) return;
+		if (estActual != STATE_CONECTADO) return;
 		Envio acc = new Envio(btSocket);
 		acc.setNewColor(newC);
 		new ConnectedThread(acc, ConnectedThread.ACCION_CAMBIARCOLOR).start();
 	}
 
 	public void toggleRele(int rele, boolean chk) {
-		if (estActual == STATE_CONECTADO) return;
+		if (estActual != STATE_CONECTADO) return;
 		Envio acc = new Envio(btSocket);
 		acc.setNroRele(rele);
 		acc.setCheckeado(chk);
@@ -216,8 +216,7 @@ public class ETDevice {
 		if (estActual != STATE_CONECTADO) return;
 		Envio acc = new Envio(btSocket);
 		boolean[] novo = acc.checkState();
-		if (novo != null)
-			setEstadoReles(novo);
+		if (novo != null) setEstadoReles(novo);
 //		ConnectedThread th = new ConnectedThread(acc, ConnectedThread.ACCION_ACTUALIZARESTADO);
 //		th.start();
 //		try {

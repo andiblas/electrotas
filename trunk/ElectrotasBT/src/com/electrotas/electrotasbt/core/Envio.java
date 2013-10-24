@@ -85,10 +85,10 @@ public class Envio implements Acciones {
 		byte[] buf1 = new byte[1];
 		if (checkeado) {
 			buf0[0] = (byte) 255;
-			buf1[0] = (byte) 1;
+			buf1[0] = (byte) ((nroRele * 2) - 1);
 		} else {
 			buf0[0] = (byte) 255;
-			buf1[0] = (byte) 2;
+			buf1[0] = (byte) (nroRele * 2);
 		}
 
 		try {
