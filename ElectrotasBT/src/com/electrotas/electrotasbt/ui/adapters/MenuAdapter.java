@@ -19,7 +19,9 @@ public class MenuAdapter extends BaseAdapter {
 	
 	private final Activity mCtx;
 	private final Hashtable<String, Integer> vals = new Hashtable<String, Integer>();
-
+	
+	
+	//hacerlo que herede de arrayadapter!!!
 	public MenuAdapter(Activity ctx) {
 		mCtx = ctx;
 		vals.put(MENU_HOME, R.drawable.alerta);
@@ -49,11 +51,9 @@ public class MenuAdapter extends BaseAdapter {
 		if (convertView == null) {
 			
 			convertView = mCtx.getLayoutInflater().inflate(R.layout.menulist, null);
-			
 			vItem = new ViewHolder();
-			vItem.icono = (ImageView) convertView.findViewById(R.id.menu_icon);
-			
-			vItem.txt = (TextView) convertView.findViewById(R.id.menu_texto);
+			vItem.icono = (ImageView) convertView.findViewById(R.id.navmenu_icon);
+			vItem.txt = (TextView) convertView.findViewById(R.id.navmenu_texto);
 			
 			convertView.setTag(vItem);
 
@@ -68,7 +68,7 @@ public class MenuAdapter extends BaseAdapter {
 		return convertView;
 		
 	}
-
+	
 	private String getKey(int pos){
 		switch (pos) {
 		case 0:
