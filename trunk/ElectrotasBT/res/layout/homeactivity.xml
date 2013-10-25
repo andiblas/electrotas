@@ -30,25 +30,36 @@
         android:background="#111" >
 
         <TextView
+            style="@style/navSection"
+            android:id="@+id/navsec_fav"
             android:layout_width="match_parent"
             android:layout_height="48dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
             android:text="@string/tv_favoritos" />
 
         <ListView
             android:id="@+id/lv_favoritos"
             android:layout_width="match_parent"
-            android:layout_height="96dp" />
+            android:layout_height="96dp"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@id/navsec_fav" />
 
         <TextView
+            style="@style/navSection"
+            android:id="@+id/navsec_nuevos"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:text="@string/tv_descubriendo" />
+            android:layout_alignParentLeft="true"
+            android:layout_below="@id/lv_favoritos"
+            android:text="@string/tv_descubriendo_encontrados" />
 
         <ListView
             android:id="@+id/lv_nuevos"
             android:layout_width="match_parent"
-            android:layout_height="134dp" />
-        
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@id/navsec_nuevos" />
     </RelativeLayout>
 
 </android.support.v4.widget.DrawerLayout>

@@ -10,13 +10,17 @@
     <string name="msjNoBluetooth">No Bluetooth</string>
     <string name="msjNoBluetoothDesc">Este dispositivo no tiene soporte Bluetooth</string>
     <string name="action_guardarColor">Guardar</string>
-
-    <!-- HomeActivity -->
+	
+    <!-- drawers -->
     <string name="openDrawer">Abrir Navegacion</string>
     <string name="closeDrawer">Cerrar Navegacion</string>
     
-    
     <string name="tv_favoritos">Favoritos</string>
+    <string name="tv_descubriendo_encontrados">Encontrados</string>
     <string name="tv_descubriendo">Descubriendo...</string>
+    <string name="closeDrawer">Cerrar Navegacion</string>
+    
+    <!-- HomeActivity -->
+
 	
 </resources>
