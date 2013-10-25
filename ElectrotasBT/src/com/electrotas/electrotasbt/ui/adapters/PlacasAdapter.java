@@ -19,6 +19,7 @@ public class PlacasAdapter extends ArrayAdapter<Placa> {
 
 	public PlacasAdapter(Context c, int resource, ArrayList<Placa> objects) {
 		super(c, resource, objects);
+		list = objects;
 		infl = LayoutInflater.from(c);
 	}
 

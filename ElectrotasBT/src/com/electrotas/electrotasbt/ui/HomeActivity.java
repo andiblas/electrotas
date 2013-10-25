@@ -24,6 +24,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.electrotas.electrotasbt.R;
 import com.electrotas.electrotasbt.core.ETDevice;
@@ -74,9 +75,9 @@ public class HomeActivity extends ActionBarActivity {
 				R.layout.menulist, Placa.select(getApplicationContext()));
 		listaFav.setAdapter(placasAdap);
 
-		Set<BluetoothDevice> caca = btAdapter.getBondedDevices();
+		Set<BluetoothDevice> bonded = btAdapter.getBondedDevices();
 		ArrayList<BluetoothDevice> lista = new ArrayList<BluetoothDevice>();
-		for (BluetoothDevice a : caca) {
+		for (BluetoothDevice a : bonded) {
 			lista.add(a);
 		}
 		btAdap = new ArrayAdapter<BluetoothDevice>(getApplicationContext(),
@@ -173,6 +174,14 @@ public class HomeActivity extends ActionBarActivity {
 		switch (item.getItemId()) {
 
 		case R.id.menu_acc1:
+			TextView tv = (TextView) findViewById(R.id.navsec_nuevos);
+			if (btAdapter.isDiscovering()){
+				btAdapter.cancelDiscovery();
+				tv.setText(R.string.tv_descubriendo_encontrados);
+			}else{
+				btAdapter.startDiscovery();
+				tv.setText(R.string.tv_descubriendo);
+			}
 			break;
 		case R.id.menu_conf:
 
