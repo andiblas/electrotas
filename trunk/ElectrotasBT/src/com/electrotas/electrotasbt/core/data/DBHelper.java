@@ -23,6 +23,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public DBHelper(Context contexto) {
         super(contexto, NOMBRE_DB, null, VERSION);
         SQLCreate = contexto.getResources().getStringArray(R.array.TABLAS);
+        this.getWritableDatabase();
     }
 
 //    //Usar este constructor para multiples bases de datos
