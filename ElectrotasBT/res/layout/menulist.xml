@@ -1,28 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content" >
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:paddingRight="10dp" >
 
     <ImageView
-        android:id="@+id/menu_icon"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginBottom="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="12dp"
-        android:layout_marginTop="8dp"
-        android:src="@drawable/icon" />
+        android:id="@+id/navmenu_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_centerVertical="true"
+        android:src="@drawable/ic_launcher"
+        android:paddingLeft="15dp" />
 
     <TextView
-        android:id="@+id/menu_texto"
+        android:id="@+id/navmenu_texto"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_toRightOf="@+id/menu_icon"
-        android:singleLine="true"
-        android:textColor="@android:color/primary_text_dark"
-        android:textSize="18sp" />
+        android:layout_height="50dp"
+        android:layout_toRightOf="@id/navmenu_icon"
+        android:gravity="center_vertical"
+        android:textColor="#FFFFFF" />
 
 </RelativeLayout>

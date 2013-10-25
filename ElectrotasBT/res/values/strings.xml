@@ -4,14 +4,19 @@
     <string name="app_name">Electrotas BT</string>
     <string name="action_settings">Settings</string>
     <string name="action_acc1">Accion</string>
-    
     <string name="hello_world">Hello world!</string>
     <string name="tit_colores">Colores!</string>
     <string name="tit_reles">Reles!</string>
-    
     <string name="msjNoBluetooth">No Bluetooth</string>
     <string name="msjNoBluetoothDesc">Este dispositivo no tiene soporte Bluetooth</string>
-	
     <string name="action_guardarColor">Guardar</string>
+
+    <!-- HomeActivity -->
+    <string name="openDrawer">Abrir Navegacion</string>
+    <string name="closeDrawer">Cerrar Navegacion</string>
     
+    
+    <string name="tv_favoritos">Favoritos</string>
+    <string name="tv_descubriendo">Descubriendo...</string>
+	
 </resources>
