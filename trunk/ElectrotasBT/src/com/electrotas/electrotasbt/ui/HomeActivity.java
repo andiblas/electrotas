@@ -1,6 +1,7 @@
 package com.electrotas.electrotasbt.ui;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Set;
 
 import android.bluetooth.BluetoothAdapter;
@@ -48,6 +49,7 @@ public class HomeActivity extends ActionBarActivity {
 	// Adaptadores de listas
 	private PlacasAdapter placasAdap;
 	private ArrayAdapter<BluetoothDevice> btAdap;
+	private final HashSet<BluetoothDevice> disposEncontrados = new HashSet<BluetoothDevice>();
 
 	// Dispositivo
 	private ETDevice dispositivo;
@@ -115,6 +117,14 @@ public class HomeActivity extends ActionBarActivity {
 				drawer.closeDrawer(drawerListL);
 			}
 		});
+		listaFav.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+					long arg3) {
+				
+					
+			}
+		});
 		listaNuevos.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
@@ -154,13 +164,17 @@ public class HomeActivity extends ActionBarActivity {
 		public void onReceive(Context context, Intent intent) {
 			String action = intent.getAction();
 			// When discovery finds a device
-			if (BluetoothDevice.ACTION_FOUND.equals(action)) {
-				// Get the BluetoothDevice object from the Intent
-				BluetoothDevice device = intent
-						.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-				btAdap.add(device);
-				btAdap.notifyDataSetChanged();
-			}
+			if (!BluetoothDevice.ACTION_FOUND.equals(action))
+				return;
+
+			// Get the BluetoothDevice object from the Intent
+			BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+			
+			if (disposEncontrados.contains(device)) return;
+			
+			disposEncontrados.add(device);
+			btAdap.add(device);
+			btAdap.notifyDataSetChanged();
 		}
 	};
 
