@@ -9,7 +9,9 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -25,19 +27,28 @@ import android.widget.ListView;
 
 import com.electrotas.electrotasbt.R;
 import com.electrotas.electrotasbt.core.ETDevice;
+import com.electrotas.electrotasbt.core.data.Placa;
 import com.electrotas.electrotasbt.helpers.Tostada;
 import com.electrotas.electrotasbt.ui.adapters.MenuAdapter;
+import com.electrotas.electrotasbt.ui.adapters.PlacasAdapter;
 
 public class HomeActivity extends ActionBarActivity {
 
+	// ui
 	private DrawerLayout drawer;
+	private ActionBarDrawerToggle toggle;
 	private ListView drawerListL;
-	private ListView drawerListR;
+	private ListView listaFav;
+	private ListView listaNuevos;
 
 	// Local Bluetooth adapter
 	private BluetoothAdapter btAdapter = null;
-	private ArrayList<BluetoothDevice> jaja = null;
 
+	// Adaptadores de listas
+	private PlacasAdapter placasAdap;
+	private ArrayAdapter<BluetoothDevice> btAdap;
+
+	// Dispositivo
 	private ETDevice dispositivo;
 
 	public ETDevice getDispositivo() {
@@ -48,28 +59,30 @@ public class HomeActivity extends ActionBarActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.homeactivity);
-		
+
 		iniciarBluetooth();
-		
+		initActionBar();
+
 		dispositivo = new ETDevice();
-		
-		drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 		drawerListL = (ListView) findViewById(R.id.left_drawer);
-		drawerListR = (ListView) findViewById(R.id.right_drawer);
-		
-		Set<BluetoothDevice> caca = btAdapter.getBondedDevices();
-		jaja = new ArrayList<BluetoothDevice>();
-		
-		for (BluetoothDevice a : caca) {
-			jaja.add(a);
-		}
-		
+		listaFav = (ListView) findViewById(R.id.lv_favoritos);
+		listaNuevos = (ListView) findViewById(R.id.lv_nuevos);
+
 		drawerListL.setAdapter(new MenuAdapter(this));
 
-		drawerListR.setAdapter(new ArrayAdapter<BluetoothDevice>(
-				getSupportActionBar().getThemedContext(),
-				android.R.layout.simple_list_item_1, jaja));
+		placasAdap = new PlacasAdapter(getApplicationContext(),
+				R.layout.menulist, Placa.select(getApplicationContext()));
+		listaFav.setAdapter(placasAdap);
 
+		Set<BluetoothDevice> caca = btAdapter.getBondedDevices();
+		ArrayList<BluetoothDevice> lista = new ArrayList<BluetoothDevice>();
+		for (BluetoothDevice a : caca) {
+			lista.add(a);
+		}
+		btAdap = new ArrayAdapter<BluetoothDevice>(getApplicationContext(),
+				android.R.layout.simple_list_item_1, lista);
+		listaNuevos.setAdapter(btAdap);
+		
 		FragmentManager fragmentManager = getSupportFragmentManager();
 		fragmentManager.beginTransaction()
 				.replace(R.id.content_frame, new HomeFragment()).commit();
@@ -91,7 +104,7 @@ public class HomeActivity extends ActionBarActivity {
 					fragment = new RelesFragment();
 					break;
 				}
-				
+
 				FragmentManager fm = getSupportFragmentManager();
 				FragmentTransaction ft = fm.beginTransaction();
 				ft.replace(R.id.content_frame, fragment);
@@ -101,53 +114,62 @@ public class HomeActivity extends ActionBarActivity {
 				drawer.closeDrawer(drawerListL);
 			}
 		});
-		drawerListR.setOnItemClickListener(new OnItemClickListener() {
+		listaNuevos.setOnItemClickListener(new OnItemClickListener() {
 			@Override
-			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+					long arg3) {
 				try {
-					dispositivo.connect(jaja.get(arg2));
+					dispositivo.connect(btAdap.getItem(arg2));
 				} catch (Exception e) {
 					String[] msj = e.getMessage().split(";");
-					Tostada.mostrar(getApplicationContext(), msj[0], msj[1], Tostada.MENSAJE_MALO);
+					Tostada.mostrar(getApplicationContext(), msj[0], msj[1],
+							Tostada.MENSAJE_MALO);
 				}
 			}
 		});
 	}
 
-//	@Override
-//	protected void onStop() {
-//		btAdapter.disable();
-//		super.onStop();
-//	}
-	
+	// @Override
+	// protected void onStop() {
+	// btAdapter.disable();
+	// super.onStop();
+	// }
+
 	@Override
 	protected void onResume() {
 		super.onResume();
-		registerReceiver(mReceiver, new IntentFilter(BluetoothDevice.ACTION_FOUND));
+		registerReceiver(mReceiver, new IntentFilter(
+				BluetoothDevice.ACTION_FOUND));
 	}
-	
+
 	@Override
 	protected void onPause() {
 		super.onPause();
 		unregisterReceiver(mReceiver);
 	}
-	
+
 	// Create a BroadcastReceiver for ACTION_FOUND
 	private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
-	    public void onReceive(Context context, Intent intent) {
-	        String action = intent.getAction();
-	        // When discovery finds a device
-	        if (BluetoothDevice.ACTION_FOUND.equals(action)) {
-	            // Get the BluetoothDevice object from the Intent
-	            BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-	            // Add the name and address to an array adapter to show in a ListView
-	            mArrayAdapter.add(device.getName() + "\n" + device.getAddress());
-	        }
-	    }
+		public void onReceive(Context context, Intent intent) {
+			String action = intent.getAction();
+			// When discovery finds a device
+			if (BluetoothDevice.ACTION_FOUND.equals(action)) {
+				// Get the BluetoothDevice object from the Intent
+				BluetoothDevice device = intent
+						.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+				btAdap.add(device);
+				btAdap.notifyDataSetChanged();
+			}
+		}
 	};
-	
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+
+		if (toggle.onOptionsItemSelected(item)) {
+			return true;
+		}
+
 		switch (item.getItemId()) {
 
 		case R.id.menu_acc1:
@@ -167,12 +189,26 @@ public class HomeActivity extends ActionBarActivity {
 		return true;
 	}
 
+	@Override
+	protected void onPostCreate(Bundle savedInstanceState) {
+		super.onPostCreate(savedInstanceState);
+		// Sync the toggle state after onRestoreInstanceState has occurred.
+		toggle.syncState();
+	}
+
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+		super.onConfigurationChanged(newConfig);
+		toggle.onConfigurationChanged(newConfig);
+	}
+
 	// funciones
-	public void iniciarBluetooth() {
+	private void iniciarBluetooth() {
 
 		btAdapter = BluetoothAdapter.getDefaultAdapter();
 		if (btAdapter == null) {
-			Tostada.mostrar(getApplicationContext(), R.string.msjNoBluetooth, R.string.msjNoBluetoothDesc, Tostada.MENSAJE_MALO);
+			Tostada.mostrar(getApplicationContext(), R.string.msjNoBluetooth,
+					R.string.msjNoBluetoothDesc, Tostada.MENSAJE_MALO);
 			finish();
 			return;
 		}
@@ -182,5 +218,30 @@ public class HomeActivity extends ActionBarActivity {
 		}
 
 	}
-	
+
+	private void initActionBar() {
+
+		drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+		toggle = new ActionBarDrawerToggle(this, /* host Activity */
+		drawer, /* DrawerLayout object */
+		R.drawable.ic_drawer, /* nav drawer icon to replace 'Up' caret */
+		R.string.openDrawer, /* "open drawer" description */
+		R.string.closeDrawer /* "close drawer" description */
+		) {
+
+			/** Called when a drawer has settled in a completely closed state. */
+			public void onDrawerClosed(View view) {
+			}
+
+			/** Called when a drawer has settled in a completely open state. */
+			public void onDrawerOpened(View drawerView) {
+			}
+		};
+
+		// Set the drawer toggle as the DrawerListener
+		drawer.setDrawerListener(toggle);
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		getSupportActionBar().setHomeButtonEnabled(true);
+	}
+
 }

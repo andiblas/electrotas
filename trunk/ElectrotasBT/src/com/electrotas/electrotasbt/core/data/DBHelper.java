@@ -15,8 +15,8 @@ import com.electrotas.electrotasbt.R;
 public class DBHelper extends SQLiteOpenHelper {
 	
     //Sentencia SQL para crear la tabla de Usuarios
-    private static final String NOMBRE_DB = "VECTIOCIAT.db";
-    private static final int VERSION = 4;
+    private static final String NOMBRE_DB = "ElectrotasBT.db";
+    private static final int VERSION = 1;
     private final String[] SQLCreate;
     
     //Usar este constructor para la base de datos NOMBRE_DB (bd por default)

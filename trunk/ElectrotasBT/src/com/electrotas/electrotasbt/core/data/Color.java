@@ -97,7 +97,7 @@ public class Color {
 				cursor.moveToNext();
 			}
 		} finally {
-			cursor.close();
+			cursor.close(); cursor = null;
 			DBProvider.cerrarConex();
 		}
 		
