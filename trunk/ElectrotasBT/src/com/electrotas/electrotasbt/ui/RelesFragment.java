@@ -138,7 +138,7 @@ public class RelesFragment extends Fragment {
 							new Intent(ACCION_CHECK_READY));
 					Thread.sleep(1000);
 				} catch (InterruptedException e) {
-					Log.e(Checkeador.class.getSimpleName(), e.getMessage());
+					Log.e(Checkeador.class.getSimpleName(), e.toString());
 					break;
 				}
 			}

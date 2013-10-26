@@ -6,13 +6,20 @@ import java.util.UUID;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
+import android.content.Context;
+import android.content.Intent;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
+import com.electrotas.electrotasbt.core.data.Placa;
+
 public class ETDevice {
-
-	// Debug
-	private static final String TAG = "ETDevice";
-
+	
+	public static final String ACTION_DISPO_GUARDADO = "com.electrotas.electrotasbt.DISPO_GUARDADO";
+	public static final String KEY_NUEVAPLACA_ID = "com.electrotas.electrotasbt.KEY_NUEVAPLACA_ID";
+	public static final String KEY_NUEVAPLACA_NOMBRE = "com.electrotas.electrotasbt.KEY_NUEVAPLACA_NOMBRE";
+	public static final String KEY_NUEVAPLACA_MAC = "com.electrotas.electrotasbt.KEY_NUEVAPLACA_MAC";
+	
 	// Unique UUID for this application
 	private static final UUID MY_UUID = UUID
 			.fromString("00001101-0000-1000-8000-00805F9B34FB");
@@ -23,6 +30,7 @@ public class ETDevice {
 
 	// Attr
 	private final BluetoothAdapter mAdapter;
+	private final Context mContext;
 	private int estActual = 0;
 	private BluetoothSocket btSocket;
 	private boolean[] estadoReles;
@@ -32,8 +40,9 @@ public class ETDevice {
 	public static final int STATE_CONECTANDO = 1; // Intentando Conectar
 	public static final int STATE_CONECTADO = 2; // Actualmente conectado
 
-	public ETDevice() {
+	public ETDevice(Context ctx) {
 		mAdapter = BluetoothAdapter.getDefaultAdapter();
+		mContext = ctx;
 	}
 
 	private synchronized void setState(int state) {
@@ -56,7 +65,7 @@ public class ETDevice {
 	 * Start the chat service. Specifically start AcceptThread to begin a
 	 * session in listening (server) mode. Called by the Activity onResume()
 	 */
-	public synchronized void start() {
+	private synchronized void start() {
 
 		// Cancel any thread attempting to make a connection
 		if (thConnect != null) {
@@ -76,7 +85,7 @@ public class ETDevice {
 
 	public synchronized void connect(BluetoothDevice device) throws Exception {
 		
-		if (!mAdapter.isEnabled()) throw new Exception("El Bluetooth no esta activado.;Por favor, activalo y vuelve a intentar.");
+		if (!mAdapter.isEnabled()) throw new Exception("El Bluetooth no esta activado.;Por favor, actívalo y vuelve a intentar.");
 		
 		// Cancel any thread attempting to make a connection
 		if (estActual == STATE_CONECTANDO) {
@@ -85,13 +94,13 @@ public class ETDevice {
 				thConnect = null;
 			}
 		}
-
+		
 		// Cancel any thread currently running a connection
 		if (thConectado != null) {
 			thConectado.cancel();
 			thConectado = null;
 		}
-
+		
 		// Start the thread to connect with the given device
 		thConnect = new ConnectThread(device);
 		thConnect.start();
@@ -115,6 +124,19 @@ public class ETDevice {
 
 		btSocket = socket;
 
+		// Preguntamos si quiere guardar por defecto aca!
+		Placa nuevaPlaca = new Placa(device.getAddress());
+		nuevaPlaca.load(mContext);
+		if (nuevaPlaca.getId() == -1) {
+			nuevaPlaca.insert(mContext);
+			
+			Intent inte = new Intent(ACTION_DISPO_GUARDADO);
+			inte.putExtra(KEY_NUEVAPLACA_ID, nuevaPlaca.getId());
+			inte.putExtra(KEY_NUEVAPLACA_NOMBRE, nuevaPlaca.getNombre());
+			inte.putExtra(KEY_NUEVAPLACA_MAC, nuevaPlaca.getMAC());
+			LocalBroadcastManager.getInstance(mContext).sendBroadcast(inte);
+		}
+		
 		setState(STATE_CONECTADO);
 	}
 
@@ -152,13 +174,13 @@ public class ETDevice {
 			try {
 				tmp = device.createRfcommSocketToServiceRecord(MY_UUID);
 			} catch (IOException e) {
-				Log.e(TAG, "Socket Type: " + mSocketType + "create() failed", e);
+				Log.e(ETDevice.class.getSimpleName(), "Socket Type: " + mSocketType + "create() failed", e);
 			}
 			mmSocket = tmp;
 		}
 
 		public void run() {
-			Log.i(TAG, "BEGIN mConnectThread SocketType:" + mSocketType);
+			Log.i(ETDevice.class.getSimpleName(), "BEGIN mConnectThread SocketType:" + mSocketType);
 			setName("ConnectThread" + mSocketType);
 
 			// Always cancel discovery because it will slow down a connection
@@ -172,7 +194,7 @@ public class ETDevice {
 				try {
 					mmSocket.close();
 				} catch (IOException e2) {
-					Log.e(TAG, "unable to close() " + mSocketType
+					Log.e(ETDevice.class.getSimpleName(), "unable to close() " + mSocketType
 							+ " socket during connection failure", e2);
 				}
 				connectionFailed();
@@ -192,7 +214,7 @@ public class ETDevice {
 			try {
 				mmSocket.close();
 			} catch (IOException e) {
-				Log.e(TAG, "close() of connect " + mSocketType
+				Log.e(ETDevice.class.getSimpleName(), "close() of connect " + mSocketType
 						+ " socket failed", e);
 			}
 		}

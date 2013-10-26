@@ -66,7 +66,7 @@ public class HomeActivity extends ActionBarActivity {
 		iniciarBluetooth();
 		initActionBar();
 
-		dispositivo = new ETDevice();
+		dispositivo = new ETDevice(getApplicationContext());
 		drawerListL = (ListView) findViewById(R.id.left_drawer);
 		listaFav = (ListView) findViewById(R.id.lv_favoritos);
 		listaNuevos = (ListView) findViewById(R.id.lv_nuevos);
@@ -121,8 +121,14 @@ public class HomeActivity extends ActionBarActivity {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
-				
 					
+					try {
+						dispositivo.connect(btAdapter.getRemoteDevice(placasAdap.getItem(arg2).getMAC()));
+					} catch (Exception e) {
+						String[] msj = e.getMessage().split(";");
+						Tostada.mostrar(getApplicationContext(), msj[0], msj[1],
+								Tostada.MENSAJE_MALO);
+					}
 			}
 		});
 		listaNuevos.setOnItemClickListener(new OnItemClickListener() {
@@ -151,12 +157,15 @@ public class HomeActivity extends ActionBarActivity {
 		super.onResume();
 		registerReceiver(mReceiver, new IntentFilter(
 				BluetoothDevice.ACTION_FOUND));
+		registerReceiver(mRDispoGuardado, new IntentFilter(
+				ETDevice.ACTION_DISPO_GUARDADO));
 	}
 
 	@Override
 	protected void onPause() {
 		super.onPause();
 		unregisterReceiver(mReceiver);
+		unregisterReceiver(mRDispoGuardado);
 	}
 
 	// Create a BroadcastReceiver for ACTION_FOUND
@@ -178,6 +187,24 @@ public class HomeActivity extends ActionBarActivity {
 		}
 	};
 
+	// Create a BroadcastReceiver for DISPO_GUARDADO
+	private final BroadcastReceiver mRDispoGuardado = new BroadcastReceiver() {
+		public void onReceive(Context context, Intent inte) {
+			String action = inte.getAction();
+			// Cuando se guardo una placa
+			if (!ETDevice.ACTION_DISPO_GUARDADO.equals(action))
+				return;
+			
+			Placa nueva = new Placa();
+			nueva.setId(inte.getIntExtra(ETDevice.KEY_NUEVAPLACA_ID, -1));
+			nueva.setNombre(inte.getStringExtra(ETDevice.KEY_NUEVAPLACA_NOMBRE));
+			nueva.setMAC(inte.getStringExtra(ETDevice.KEY_NUEVAPLACA_MAC));
+			
+			placasAdap.add(nueva);
+			placasAdap.notifyDataSetChanged();
+		}
+	};
+	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 

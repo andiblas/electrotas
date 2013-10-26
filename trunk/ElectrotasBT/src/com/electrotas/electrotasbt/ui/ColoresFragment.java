@@ -43,10 +43,7 @@ public class ColoresFragment extends Fragment {
 		cpv.setOnColorChangedListener(new OnColorChangedListener() {
 			@Override
 			public void onColorChanged(int newColor) {
-				if (colorActual == newColor)
-					return;
-				colorActual = newColor;
-				act.getDispositivo().cambiarColor(newColor);
+				cambiarColor(newColor);
 			}
 		});
 
@@ -62,6 +59,8 @@ public class ColoresFragment extends Fragment {
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
 				cpv.setColor(android.graphics.Color.parseColor(mLista.get(arg2)
+						.getColor()));
+				cambiarColor(android.graphics.Color.parseColor(mLista.get(arg2)
 						.getColor()));
 			}
 		});
@@ -105,6 +104,14 @@ public class ColoresFragment extends Fragment {
 			return super.onOptionsItemSelected(item);
 		}
 
+	}
+	
+	//funciones
+	private void cambiarColor(int c){
+		if (colorActual == c)
+			return;
+		colorActual = c;
+		act.getDispositivo().cambiarColor(c);
 	}
 
 }
