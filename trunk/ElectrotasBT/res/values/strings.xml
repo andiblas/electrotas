@@ -11,6 +11,9 @@
     <string name="msjNoBluetoothDesc">Este dispositivo no tiene soporte Bluetooth</string>
     <string name="action_guardarColor">Guardar</string>
 	
+    <!-- Misc -->
+    <string name="misc_sinNombre">Sin Nombre</string>
+    
     <!-- drawers -->
     <string name="openDrawer">Abrir Navegacion</string>
     <string name="closeDrawer">Cerrar Navegacion</string>

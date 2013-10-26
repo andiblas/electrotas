@@ -41,7 +41,7 @@
         <ListView
             android:id="@+id/lv_favoritos"
             android:layout_width="match_parent"
-            android:layout_height="96dp"
+            android:layout_height="100dp"
             android:layout_alignParentLeft="true"
             android:layout_below="@id/navsec_fav" />
 
