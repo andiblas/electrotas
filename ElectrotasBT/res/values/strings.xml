@@ -20,7 +20,7 @@
     
     <string name="tv_favoritos">Favoritos</string>
     <string name="tv_descubriendo_encontrados">Encontrados</string>
-    <string name="tv_descubriendo">Descubriendo&#8230;</string>
+    <string name="tv_descubriendo">Buscando&#8230;</string>
     <string name="closeDrawer">Cerrar Navegacion</string>
     
     <!-- HomeActivity -->
