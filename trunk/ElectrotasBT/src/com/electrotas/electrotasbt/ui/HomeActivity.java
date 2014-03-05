@@ -25,6 +25,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.electrotas.electrotasbt.R;
@@ -40,6 +41,7 @@ public class HomeActivity extends ActionBarActivity {
 	private DrawerLayout drawer;
 	private ActionBarDrawerToggle toggle;
 	private ListView drawerListL;
+	private RelativeLayout drawerListR;
 	private ListView listaFav;
 	private ListView listaNuevos;
 
@@ -68,6 +70,7 @@ public class HomeActivity extends ActionBarActivity {
 
 		dispositivo = new ETDevice(getApplicationContext());
 		drawerListL = (ListView) findViewById(R.id.left_drawer);
+		drawerListR = (RelativeLayout) findViewById(R.id.right_drawer);
 		listaFav = (ListView) findViewById(R.id.lv_favoritos);
 		listaNuevos = (ListView) findViewById(R.id.lv_nuevos);
 
@@ -209,6 +212,9 @@ public class HomeActivity extends ActionBarActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 
 		if (toggle.onOptionsItemSelected(item)) {
+			if (drawer.isDrawerOpen(drawerListR)){
+				drawer.closeDrawer(drawerListR);
+			};
 			return true;
 		}
 
@@ -270,7 +276,7 @@ public class HomeActivity extends ActionBarActivity {
 	}
 
 	private void initActionBar() {
-
+		
 		drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 		toggle = new ActionBarDrawerToggle(this, /* host Activity */
 		drawer, /* DrawerLayout object */
@@ -286,8 +292,9 @@ public class HomeActivity extends ActionBarActivity {
 			/** Called when a drawer has settled in a completely open state. */
 			public void onDrawerOpened(View drawerView) {
 			}
+			
 		};
-
+		
 		// Set the drawer toggle as the DrawerListener
 		drawer.setDrawerListener(toggle);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
