@@ -102,6 +102,32 @@ public class Envio implements Acciones {
 		}
 	}
 	
+	@Override
+	public void toggleAllReles() {
+		byte[] buf0 = new byte[1];
+		byte[] buf1 = new byte[1];
+		for (int rele = 1; rele < 9; rele++) {
+			if (checkeado) {
+				buf0[0] = (byte) 255;
+				buf1[0] = (byte) ((rele * 2) - 1);
+			} else {
+				buf0[0] = (byte) 255;
+				buf1[0] = (byte) (rele * 2);
+			}
+
+			try {
+				synchronized (Envio.class) {
+					mmOutStream.write(buf0);
+					mmOutStream.write(buf1);
+					mmOutStream.flush();
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+
+	}
+	
 	/**
 	 * Checkea y devuelve un array de boolean con el estado
 	 * de cada uno de los reles de como se encuentra en la
@@ -127,10 +153,10 @@ public class Envio implements Acciones {
 					mmInStream.read(buf0);
 					resul[i] = buf0[0] == 1 ? true : false;
 				}
-				
+
 			}
 			return resul;
-			
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
