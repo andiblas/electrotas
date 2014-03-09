@@ -9,7 +9,12 @@
     <string name="tit_reles">Reles!</string>
     <string name="msjNoBluetooth">No Bluetooth</string>
     <string name="msjNoBluetoothDesc">Este dispositivo no tiene soporte Bluetooth</string>
+    
+    <!-- Menus -->
     <string name="action_guardarColor">Guardar</string>
+    <string name="action_encenderTodos">Encender Todos</string>
+    <string name="action_apagarTodos">Apagar Todos</string>
+    
 	
     <!-- Misc -->
     <string name="misc_sinNombre">Sin Nombre</string>

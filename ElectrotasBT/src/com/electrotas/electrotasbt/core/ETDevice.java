@@ -235,6 +235,13 @@ public class ETDevice {
 		new ConnectedThread(acc, ConnectedThread.ACCION_CAMBIARRELE).start();
 	}
 
+	public void toggleAllReles(boolean chk) {
+		if (estActual != STATE_CONECTADO) return;
+		Envio acc = new Envio(btSocket);
+		acc.setCheckeado(chk);
+		new ConnectedThread(acc, ConnectedThread.ACCION_CAMBIARTODOS).start();
+	}
+	
 	public void actualizarEstado() {
 		if (estActual != STATE_CONECTADO) return;
 		Envio acc = new Envio(btSocket);
@@ -259,6 +266,7 @@ public class ETDevice {
 		public static final int ACCION_CAMBIARCOLOR = 0;
 		public static final int ACCION_CAMBIARRELE = 1;
 		public static final int ACCION_ACTUALIZARESTADO = 2;
+		public static final int ACCION_CAMBIARTODOS = 3;
 
 		public ConnectedThread(Acciones a, int queAccion) {
 			caca = a;
@@ -276,6 +284,9 @@ public class ETDevice {
 				boolean[] novo = caca.checkState();
 				if (novo != null)
 					setEstadoReles(novo);
+				break;
+			case ACCION_CAMBIARTODOS:
+				caca.toggleAllReles();
 				break;
 			}
 		}
