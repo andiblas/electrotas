@@ -4,10 +4,7 @@ import android.content.Context;
 
 public class SessionManager {
 	
-	private Context mCtx;
-	
-	public SessionManager(Context c){
-		mCtx = c;
+	public SessionManager(){
 	}
 	
 	/**
