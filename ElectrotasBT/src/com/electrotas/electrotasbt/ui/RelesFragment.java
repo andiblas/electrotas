@@ -115,7 +115,7 @@ public class RelesFragment extends Fragment {
 	 * Este es el receptor de la difusion, hecha por el thread Checkeador
 	 * cuando termina de buscar los valores de la placa
 	 */
-	private BroadcastReceiver mr = new BroadcastReceiver() {
+	private final BroadcastReceiver mr = new BroadcastReceiver() {
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			boolean[] est = act.getDispositivo().getEstadoReles();

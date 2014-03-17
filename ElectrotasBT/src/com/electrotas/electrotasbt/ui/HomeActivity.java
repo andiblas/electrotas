@@ -16,6 +16,7 @@ import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -32,6 +33,7 @@ import com.electrotas.electrotasbt.R;
 import com.electrotas.electrotasbt.core.ETDevice;
 import com.electrotas.electrotasbt.core.data.Placa;
 import com.electrotas.electrotasbt.helpers.Tostada;
+import com.electrotas.electrotasbt.ui.adapters.BTDeviceAdapter;
 import com.electrotas.electrotasbt.ui.adapters.MenuAdapter;
 import com.electrotas.electrotasbt.ui.adapters.PlacasAdapter;
 
@@ -85,8 +87,8 @@ public class HomeActivity extends ActionBarActivity {
 		for (BluetoothDevice a : bonded) {
 			lista.add(a);
 		}
-		btAdap = new ArrayAdapter<BluetoothDevice>(getApplicationContext(),
-				android.R.layout.simple_list_item_1, lista);
+		btAdap = new BTDeviceAdapter(getApplicationContext(),
+				R.layout.menulist, lista);
 		listaNuevos.setAdapter(btAdap);
 		
 		FragmentManager fragmentManager = getSupportFragmentManager();
@@ -158,25 +160,24 @@ public class HomeActivity extends ActionBarActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		registerReceiver(mReceiver, new IntentFilter(
-				BluetoothDevice.ACTION_FOUND));
-		registerReceiver(mRDispoGuardado, new IntentFilter(
-				ETDevice.ACTION_DISPO_GUARDADO));
+		registerReceiver(mReceiver,new IntentFilter(BluetoothDevice.ACTION_FOUND));
+		
+		LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(mRDispoGuardado,
+				new IntentFilter(ETDevice.ACTION_DISPO_GUARDADO));
 	}
 
 	@Override
 	protected void onPause() {
 		super.onPause();
 		unregisterReceiver(mReceiver);
-		unregisterReceiver(mRDispoGuardado);
+		LocalBroadcastManager.getInstance(getApplicationContext()).unregisterReceiver(mRDispoGuardado);
 	}
 
 	// Create a BroadcastReceiver for ACTION_FOUND
 	private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
 		public void onReceive(Context context, Intent intent) {
-			String action = intent.getAction();
 			// When discovery finds a device
-			if (!BluetoothDevice.ACTION_FOUND.equals(action))
+			if (!BluetoothDevice.ACTION_FOUND.equals(intent.getAction()))
 				return;
 
 			// Get the BluetoothDevice object from the Intent
@@ -193,9 +194,8 @@ public class HomeActivity extends ActionBarActivity {
 	// Create a BroadcastReceiver for DISPO_GUARDADO
 	private final BroadcastReceiver mRDispoGuardado = new BroadcastReceiver() {
 		public void onReceive(Context context, Intent inte) {
-			String action = inte.getAction();
 			// Cuando se guardo una placa
-			if (!ETDevice.ACTION_DISPO_GUARDADO.equals(action))
+			if (!ETDevice.ACTION_DISPO_GUARDADO.equals(inte.getAction()))
 				return;
 			
 			Placa nueva = new Placa();
@@ -287,10 +287,12 @@ public class HomeActivity extends ActionBarActivity {
 
 			/** Called when a drawer has settled in a completely closed state. */
 			public void onDrawerClosed(View view) {
+				
 			}
 
 			/** Called when a drawer has settled in a completely open state. */
 			public void onDrawerOpened(View drawerView) {
+				setTitle(R.string.app_name);
 			}
 			
 		};
