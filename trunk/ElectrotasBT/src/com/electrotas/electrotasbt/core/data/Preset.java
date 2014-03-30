@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.electrotas.electrotasbt.R;
@@ -16,6 +17,12 @@ public class Preset {
 	private ArrayList<Integer> reles = new ArrayList<Integer>();
 	
 	public Preset() {
+	}
+	
+	private Preset(Cursor c){
+		id = c.getInt(0);
+		nombre = c.getString(1);
+		
 	}
 
 	public int getId() {
@@ -60,7 +67,33 @@ public class Preset {
 		return;
 	}
 	
-	
+	public static ArrayList<Preset> select(Context ctx){
+		DBHelper dbHelper = DBProvider.obtenerConex(ctx);
+		SQLiteDatabase db = dbHelper.getReadableDatabase();
+		
+		if (db == null) return null;
+		
+		Cursor cursor = db.query(Preset.class.getSimpleName(), null, null, null, null, null, null);
+
+		if (cursor.getCount() <= 0)
+			return new ArrayList<Preset>();
+
+		ArrayList<Preset> colores = new ArrayList<Preset>();
+
+		try {
+			cursor.moveToFirst();
+			while (!cursor.isAfterLast()) {
+				colores.add(new Preset(cursor));
+				cursor.moveToNext();
+			}
+		} finally {
+			cursor.close(); cursor = null;
+			DBProvider.cerrarConex();
+		}
+		
+		return colores;
+		
+	}
 	
 	
 }
