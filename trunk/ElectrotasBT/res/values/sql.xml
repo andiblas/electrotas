@@ -21,5 +21,23 @@
         );
         </item>
         
+        <!-- 2 -->
+        <item>
+        CREATE TABLE Preset
+        (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            Nombre TEXT,
+            Color INT,
+            Rele1 INT,
+            Rele2 INT,
+            Rele3 INT,
+            Rele4 INT,
+            Rele5 INT,
+            Rele6 INT,
+            Rele7 INT,
+            Rele8 INT
+        );
+        </item>
+        
     </string-array>
 </resources>

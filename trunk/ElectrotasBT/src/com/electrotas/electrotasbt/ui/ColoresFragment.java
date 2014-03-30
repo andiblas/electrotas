@@ -36,6 +36,8 @@ public class ColoresFragment extends Fragment {
 		final View ui = inflater
 				.inflate(R.layout.coloresfrag, container, false);
 		act = (HomeActivity) getActivity();
+		act.getSupportActionBar().setTitle(R.string.fragname_Colores);
+		
 		final ColorPickerView cpv = (ColorPickerView) ui
 				.findViewById(R.id.ColorPicker);
 		setHasOptionsMenu(true);
@@ -99,6 +101,9 @@ public class ColoresFragment extends Fragment {
 						"Ocurrio un problema al guardar el color.", null,
 						Tostada.MENSAJE_MALO);
 			}
+			return true;
+		case R.id.menu_guardarPreset:
+			
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
