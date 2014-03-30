@@ -57,7 +57,10 @@ public class HomeActivity extends ActionBarActivity {
 
 	// Dispositivo
 	private ETDevice dispositivo;
-
+	
+	// Otros
+	private int fragActual = 0;
+	
 	public ETDevice getDispositivo() {
 		return dispositivo;
 	}
@@ -93,7 +96,7 @@ public class HomeActivity extends ActionBarActivity {
 		
 		FragmentManager fragmentManager = getSupportFragmentManager();
 		fragmentManager.beginTransaction()
-				.replace(R.id.content_frame, new HomeFragment()).commit();
+				.replace(R.id.content_frame, new PresetsFragment()).commit();
 
 		drawerListL.setOnItemClickListener(new OnItemClickListener() {
 			@Override
@@ -103,7 +106,7 @@ public class HomeActivity extends ActionBarActivity {
 				Fragment fragment = null;
 				switch (position) {
 				case 0:
-					fragment = new HomeFragment();
+					fragment = new PresetsFragment();
 					break;
 				case 1:
 					fragment = new ColoresFragment();
@@ -113,6 +116,7 @@ public class HomeActivity extends ActionBarActivity {
 					break;
 				}
 
+				fragActual = position;
 				FragmentManager fm = getSupportFragmentManager();
 				FragmentTransaction ft = fm.beginTransaction();
 				ft.replace(R.id.content_frame, fragment);
@@ -230,9 +234,6 @@ public class HomeActivity extends ActionBarActivity {
 				tv.setText(R.string.tv_descubriendo);
 			}
 			break;
-		case R.id.menu_conf:
-
-			break;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
@@ -287,12 +288,24 @@ public class HomeActivity extends ActionBarActivity {
 
 			/** Called when a drawer has settled in a completely closed state. */
 			public void onDrawerClosed(View view) {
-				
+				super.onDrawerClosed(view);
+				switch (fragActual) {
+				case 0:
+					getSupportActionBar().setTitle(R.string.fragname_Preset);
+					break;
+				case 1:
+					getSupportActionBar().setTitle(R.string.fragname_Colores);
+					break;
+				case 2:
+					getSupportActionBar().setTitle(R.string.fragname_Reles);
+					break;
+				}
 			}
 
 			/** Called when a drawer has settled in a completely open state. */
 			public void onDrawerOpened(View drawerView) {
-				setTitle(R.string.app_name);
+				super.onDrawerOpened(drawerView);
+				getSupportActionBar().setTitle(R.string.app_name);
 			}
 			
 		};

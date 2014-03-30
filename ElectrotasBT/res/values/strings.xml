@@ -4,9 +4,6 @@
     <string name="app_name">Electrotas BT</string>
     <string name="action_settings">Settings</string>
     <string name="action_buscarDispo">Buscar</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="tit_colores">Colores!</string>
-    <string name="tit_reles">Reles!</string>
     <string name="msjNoBluetooth">No Bluetooth</string>
     <string name="msjNoBluetoothDesc">Este dispositivo no tiene soporte Bluetooth</string>
     
@@ -14,7 +11,7 @@
     <string name="action_guardarColor">Guardar</string>
     <string name="action_encenderTodos">Encender Todos</string>
     <string name="action_apagarTodos">Apagar Todos</string>
-    
+    <string name="action_guardarPreset">Guardar Preset</string>
 	
     <!-- Misc -->
     <string name="misc_sinNombre">Sin Nombre</string>
@@ -29,6 +26,14 @@
     <string name="closeDrawer">Cerrar Navegacion</string>
     
     <!-- HomeActivity -->
-
+	<string name="fragname_Preset">Presets</string>
+	<string name="fragname_Colores">Colores</string>
+	<string name="fragname_Reles">Reles</string>
+	
+    <!-- Presets -->
+	<string name="msj_noHayPreset">Sin presets guardados!</string>
+	<string name="msj_helpGuardarPreset">Para comenzar a guardar configuraciones predeterminadas, 
+	    primero active los reles y colores a gusto y despues presione \'Guardar Preset\'.</string>
+	
 	
 </resources>

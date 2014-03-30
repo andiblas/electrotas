@@ -8,13 +8,20 @@ import android.view.ViewGroup;
 
 import com.electrotas.electrotasbt.R;
 
-public class HomeFragment extends Fragment {
-
+public class PresetsFragment extends Fragment {
+	
+	private HomeActivity act;
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-
-		return inflater.inflate(R.layout.homefrag, container, false);
+		final View ui = inflater
+				.inflate(R.layout.presetsfrag, container, false);
+		
+		act = (HomeActivity) getActivity();
+		act.getSupportActionBar().setTitle(R.string.fragname_Preset);
+		
+		return ui;
 	}
 	
 }

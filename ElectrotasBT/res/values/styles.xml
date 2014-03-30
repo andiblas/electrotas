@@ -24,4 +24,9 @@
         <!-- <item name="displayOptions"></item> -->
     </style>
 
+    <style name="txtImportante" parent="android:attr/textAppearanceMedium">
+        <item name="android:textColor">@color/Negro</item>
+        <item name="android:textSize">22sp</item>
+    </style>
+    
 </resources>

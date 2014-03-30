@@ -41,6 +41,7 @@ public class RelesFragment extends Fragment {
 			Bundle savedInstanceState) {
 		final View ui = inflater.inflate(R.layout.relesfrag, container, false);
 		act = (HomeActivity) getActivity();
+		act.getSupportActionBar().setTitle(R.string.fragname_Reles);
 		
 		reles[0] = (ToggleButton) ui.findViewById(R.id.rele1);
 		reles[1] = (ToggleButton) ui.findViewById(R.id.rele2);
@@ -83,6 +84,9 @@ public class RelesFragment extends Fragment {
 					break;
 				}
 			}
+			return true;
+		case R.id.menu_guardarPreset:
+			
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);

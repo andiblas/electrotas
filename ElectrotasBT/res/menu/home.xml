@@ -7,10 +7,5 @@
 		android:title="@string/action_buscarDispo"
 		electrotas:showAsAction="always"/>
 	
-	<item
-		android:id="@+id/menu_conf"
-		android:orderInCategory="200"
-		android:title="@string/action_settings"
-		electrotas:showAsAction="never"/>
 
 </menu>
