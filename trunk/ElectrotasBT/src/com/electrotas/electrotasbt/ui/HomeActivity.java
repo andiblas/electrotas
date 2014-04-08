@@ -74,7 +74,7 @@ public class HomeActivity extends ActionBarActivity {
 		initActionBar();
 
 		dispositivo = new ETDevice(getApplicationContext());
-		drawerListL = (ListView) findViewById(R.id.left_drawer);
+		drawerListL = (ListView) findViewById(R.id.lvMenu);
 		drawerListR = (RelativeLayout) findViewById(R.id.right_drawer);
 		listaFav = (ListView) findViewById(R.id.lv_favoritos);
 		listaNuevos = (ListView) findViewById(R.id.lv_nuevos);

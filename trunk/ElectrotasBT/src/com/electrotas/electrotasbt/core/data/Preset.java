@@ -49,7 +49,13 @@ public class Preset {
 	public void setReles(ArrayList<Integer> r) {
 		reles = r;
 	}
-
+	
+	
+	@Override
+	public String toString() {
+		return this.nombre;
+	}
+	
 	public void insert(Context ctx) {
 		DBHelper dbHelper = DBProvider.obtenerConex(ctx);
 		SQLiteDatabase db = dbHelper.getWritableDatabase();
