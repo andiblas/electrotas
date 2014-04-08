@@ -11,23 +11,14 @@
         android:layout_height="match_parent" />
 
     <!-- Menú Lateral -->
-    
-    <RelativeLayout
+
+    <ListView
         android:id="@+id/left_drawer"
         android:layout_width="240dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="@drawable/fondo_drawer" >
-
-        <ListView
-            android:id="@+id/lvMenu"
-            android:layout_width="240dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="start"
-			android:listSelector="@drawable/listselector"
-			
-            android:choiceMode="singleChoice" />
-    </RelativeLayout>
+        android:background="@drawable/fondo_drawer"
+        android:choiceMode="singleChoice" />
 
     <!-- Menú Lateral -->
 
@@ -39,8 +30,8 @@
         android:background="@drawable/fondo_drawer" >
 
         <TextView
-            style="@style/navSection"
             android:id="@+id/navsec_fav"
+            style="@style/navSection"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:layout_alignParentLeft="true"
@@ -55,8 +46,8 @@
             android:layout_below="@id/navsec_fav" />
 
         <TextView
-            style="@style/navSection"
             android:id="@+id/navsec_nuevos"
+            style="@style/navSection"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:layout_alignParentLeft="true"
