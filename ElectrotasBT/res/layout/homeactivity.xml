@@ -11,14 +11,23 @@
         android:layout_height="match_parent" />
 
     <!-- Menú Lateral -->
-
-    <ListView
+    
+    <RelativeLayout
         android:id="@+id/left_drawer"
         android:layout_width="240dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="@drawable/fondo_drawer"
-        android:choiceMode="singleChoice" />
+        android:background="@drawable/fondo_drawer" >
+
+        <ListView
+            android:id="@+id/lvMenu"
+            android:layout_width="240dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+			android:listSelector="@drawable/listselector"
+			
+            android:choiceMode="singleChoice" />
+    </RelativeLayout>
 
     <!-- Menú Lateral -->
 

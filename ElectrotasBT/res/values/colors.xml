@@ -5,4 +5,8 @@
     <color name="Negro">#000000</color>
     <color name="Celeste">#3193D7</color>
     
+    <color name="list_normal">#96FFFFFF</color>
+    <color name="list_active">#66000000</color>
+    <color name="list_pressed">#CA000000</color>
+    
 </resources>

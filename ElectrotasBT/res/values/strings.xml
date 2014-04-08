@@ -6,34 +6,38 @@
     <string name="action_buscarDispo">Buscar</string>
     <string name="msjNoBluetooth">No Bluetooth</string>
     <string name="msjNoBluetoothDesc">Este dispositivo no tiene soporte Bluetooth</string>
-    
+
     <!-- Menus -->
     <string name="action_guardarColor">Guardar</string>
     <string name="action_encenderTodos">Encender Todos</string>
     <string name="action_apagarTodos">Apagar Todos</string>
     <string name="action_guardarPreset">Guardar Preset</string>
-	
+
     <!-- Misc -->
     <string name="misc_sinNombre">Sin Nombre</string>
-    
+
     <!-- drawers -->
     <string name="openDrawer">Abrir Navegacion</string>
     <string name="closeDrawer">Cerrar Navegacion</string>
-    
     <string name="tv_favoritos">Favoritos</string>
     <string name="tv_descubriendo_encontrados">Encontrados</string>
     <string name="tv_descubriendo">Buscando&#8230;</string>
     <string name="closeDrawer">Cerrar Navegacion</string>
-    
+
     <!-- HomeActivity -->
-	<string name="fragname_Preset">Presets</string>
-	<string name="fragname_Colores">Colores</string>
-	<string name="fragname_Reles">Reles</string>
-	
+    <string name="fragname_Preset">Presets</string>
+    <string name="fragname_Colores">Colores</string>
+    <string name="fragname_Reles">Reles</string>
+
     <!-- Presets -->
-	<string name="msj_noHayPreset">Sin presets guardados!</string>
-	<string name="msj_helpGuardarPreset">Para comenzar a guardar configuraciones predeterminadas, 
-	    primero active los reles y colores a gusto y despues presione \'Guardar Preset\'.</string>
-	
-	
+    <string name="msj_noHayPreset">Sin presets guardados!</string>
+    <string name="msj_helpGuardarPreset">Para comenzar a guardar configuraciones predeterminadas, 
+	    primero active los reles y colores a gusto y después presione \'Guardar Preset\'.</string>
+    
+    <!-- Dialog -->
+    <string name="dia_tit_GuardarPreset">Guardar Preset...</string>
+	<string name="dia_guardar">Guardar</string>
+	<string name="dia_cancelar">Cancelar</string>
+	<string name="dia_hint_nombre">Nombra tu preset</string>
+    
 </resources>
