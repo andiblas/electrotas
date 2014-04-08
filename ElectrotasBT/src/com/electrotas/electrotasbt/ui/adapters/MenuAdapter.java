@@ -13,7 +13,7 @@ import com.electrotas.electrotasbt.R;
 
 public class MenuAdapter extends BaseAdapter {
 	
-	private static final String MENU_HOME = "Home";
+	private static final String MENU_PRESETS = "Presets";
 	private static final String MENU_COLORES = "Colores";
 	private static final String MENU_RELES = "Reles";
 	
@@ -24,7 +24,7 @@ public class MenuAdapter extends BaseAdapter {
 	//hacerlo que herede de arrayadapter!!!
 	public MenuAdapter(Activity ctx) {
 		mCtx = ctx;
-		vals.put(MENU_HOME, R.drawable.alerta);
+		vals.put(MENU_PRESETS, R.drawable.alerta);
 		vals.put(MENU_COLORES, R.drawable.ok);
 		vals.put(MENU_RELES, R.drawable.icon);
 	}
@@ -72,7 +72,7 @@ public class MenuAdapter extends BaseAdapter {
 	private String getKey(int pos){
 		switch (pos) {
 		case 0:
-			return MENU_HOME;
+			return MENU_PRESETS;
 		case 1:
 			return MENU_COLORES;
 		case 2:
