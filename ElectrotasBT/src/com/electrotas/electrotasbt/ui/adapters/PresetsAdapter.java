@@ -10,14 +10,14 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.electrotas.electrotasbt.R;
-import com.electrotas.electrotasbt.core.data.Placa;
+import com.electrotas.electrotasbt.core.data.Preset;
 
-public class PresetsAdapter extends ArrayAdapter<Placa> {
+public class PresetsAdapter extends ArrayAdapter<Preset> {
 
-	private ArrayList<Placa> list = null;
+	private ArrayList<Preset> list = null;
 	private final LayoutInflater infl;
 
-	public PresetsAdapter(Context c, int resource, ArrayList<Placa> objects) {
+	public PresetsAdapter(Context c, int resource, ArrayList<Preset> objects) {
 		super(c, resource, objects);
 		list = objects;
 		infl = LayoutInflater.from(c);
@@ -29,7 +29,7 @@ public class PresetsAdapter extends ArrayAdapter<Placa> {
 	}
 
 	@Override
-	public Placa getItem(int position) {
+	public Preset getItem(int position) {
 		// TODO Auto-generated method stub
 		return list.get(position);
 	}
